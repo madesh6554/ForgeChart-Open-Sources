@@ -2262,10 +2262,12 @@
       z-index: 50;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
       border-color: rgba(229, 9, 20, 0.5);
+      transition: none !important;
     }
     html[data-theme="light"] .canvas-mode-editor .canvas-node.dragging {
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
       border-color: var(--red);
+      transition: none !important;
     }
     .canvas-mode-executions .canvas-node {
       cursor: pointer;
@@ -7582,16 +7584,25 @@
     // ─── 8. ACTIVE NAV SECTION TRACKING ──────────────────────────────────
     const pageSections = document.querySelectorAll('section[id]');
     const navAnchors   = document.querySelectorAll('.nav-links a');
-    const navIo = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navAnchors.forEach(a => {
-            a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
-          });
-        }
+
+    function updateActiveNav() {
+      const scrollY = window.__lenis ? window.__lenis.scroll : window.scrollY;
+      let current = '';
+      pageSections.forEach(sec => {
+        if (scrollY >= sec.offsetTop - 120) current = sec.id;
       });
-    }, { threshold: 0.32, rootMargin: '-64px 0px -42% 0px' });
-    pageSections.forEach(s => navIo.observe(s));
+      navAnchors.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    }
+
+    // hook into Lenis scroll event if available, otherwise use window scroll
+    if (window.__lenis) {
+      window.__lenis.on('scroll', updateActiveNav);
+    } else {
+      window.addEventListener('scroll', updateActiveNav, { passive: true });
+    }
+    updateActiveNav(); // run once on load
 
     // ─── 9. LIVE GITHUB STAR COUNT ────────────────────────────────────────
     fetch('https://api.github.com/repos/Forgemind-git/ForgeCRM')
