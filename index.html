@@ -1651,32 +1651,61 @@
     /* ─── COMPARISON MATRIX TABLE ─── */
     .comp-wrap {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border-radius: 16px;
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-glow);
+    }
+    /* fade hint on mobile so user knows it scrolls */
+    @media (max-width: 768px) {
+      .comp-wrap { border-radius: 12px; }
+      .comp-wrap::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0;
+        width: 40px; height: 100%;
+        background: linear-gradient(to right, transparent, var(--dark));
+        pointer-events: none;
+        border-radius: 0 12px 12px 0;
+      }
+      .comp-wrap { position: relative; }
     }
     .comp-table {
       width: 100%;
       border-collapse: collapse;
       background: var(--dark);
       text-align: left;
-      min-width: 600px;
+      min-width: 680px;
     }
     .comp-table th, .comp-table td {
-      padding: 16px 20px;
-      font-size: 13.5px;
+      padding: 14px 16px;
+      font-size: 13px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      white-space: nowrap;
     }
+    /* sticky first column on mobile */
+    .comp-table th:first-child,
+    .comp-table td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: #09090b;
+      min-width: 140px;
+      max-width: 160px;
+      white-space: normal;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.4);
+    }
+    html[data-theme="light"] .comp-table th:first-child,
+    html[data-theme="light"] .comp-table td:first-child { background: var(--dark-2); }
     .comp-table th {
       font-family: var(--font-title);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-dark);
       background: #09090b;
     }
-    /* Glowing card outline highlight for ForgeCRM Column */
     .comp-table th.brand-col, .comp-table td.brand-col {
       background: rgba(229, 9, 20, 0.03);
       border-left: 1.5px solid rgba(229, 9, 20, 0.2);
@@ -1692,8 +1721,8 @@
       border-bottom: 1.5px solid rgba(229, 9, 20, 0.25);
     }
     .comp-table tr:hover { background: rgba(255, 255, 255, 0.01); }
-    .comp-val-yes { color: #4ade80; display: flex; align-items: center; gap: 6px; font-weight: 600; }
-    .comp-val-no { color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
+    .comp-val-yes { color: #4ade80; font-weight: 600; }
+    .comp-val-no  { color: var(--text-dark); }
 
     /* ─── GET STARTED DEVELOPER MANUAL ─── */
     .devman-section-grid {
@@ -4683,48 +4712,69 @@
         <table class="comp-table">
           <thead>
             <tr>
-              <th>WhatsApp CRM Specs</th>
-              <th class="brand-col" style="color: #25D366; border-color: rgba(37, 211, 102, 0.25);">ForgeCRM (Self-Hosted)</th>
-              <th>Wati (SaaS Middleman)</th>
+              <th>Feature</th>
+              <th class="brand-col">ForgeCRM (Self-Hosted)</th>
+              <th>Wati (SaaS)</th>
               <th>360Dialog (API Proxy)</th>
-              <th>Kommo (Proprietary SaaS)</th>
+              <th>Kommo (SaaS CRM)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Open Source Code</td>
-              <td class="brand-col"><span class="comp-val-yes" style="color: #25D366;">✓ 100% MIT</span></td>
+              <td>Open Source</td>
+              <td class="brand-col"><span class="comp-val-yes">✓ 100% MIT License</span></td>
               <td><span class="comp-val-no">✗ Closed Source</span></td>
               <td><span class="comp-val-no">✗ Closed Source</span></td>
               <td><span class="comp-val-no">✗ Closed Source</span></td>
             </tr>
             <tr>
               <td>WhatsApp Cloud API</td>
-              <td class="brand-col"><span class="comp-val-yes" style="color: #25D366;">✓ Direct Connection</span></td>
+              <td class="brand-col"><span class="comp-val-yes">✓ Direct Connection</span></td>
               <td><span class="comp-val-no">✗ Routed Proxy</span></td>
-              <td><span class="comp-val-yes">✓ Direct connection</span></td>
+              <td><span class="comp-val-yes">✓ Direct</span></td>
               <td><span class="comp-val-no">✗ Routed Proxy</span></td>
             </tr>
             <tr>
-              <td>Message Rate Limits</td>
-              <td class="brand-col"><span class="comp-val-yes" style="color: #25D366;">✓ Uncapped API</span></td>
-              <td><span class="comp-val-no">✗ Provider Throttled</span></td>
-              <td><span class="comp-val-yes">✓ High Throughput</span></td>
-              <td><span class="comp-val-no">✗ Provider Throttled</span></td>
+              <td>Multi-User & RBAC</td>
+              <td class="brand-col"><span class="comp-val-yes">✓ Admin / BDA / Viewer</span></td>
+              <td><span class="comp-val-no">✗ Basic roles only</span></td>
+              <td><span class="comp-val-no">✗ No UI / Dev only</span></td>
+              <td><span class="comp-val-yes">✓ Limited</span></td>
             </tr>
             <tr>
-              <td>Meta Template Portal</td>
-              <td class="brand-col"><span class="comp-val-yes" style="color: #25D366;">✓ Native Sync</span></td>
-              <td><span class="comp-val-no">✗ Limited Features</span></td>
-              <td><span class="comp-val-no">✗ Manual Setup Only</span></td>
-              <td><span class="comp-val-no">✗ Limited Features</span></td>
+              <td>AI Integration</td>
+              <td class="brand-col"><span class="comp-val-yes">✓ OpenAI / Anthropic / Gemini</span></td>
+              <td><span class="comp-val-no">✗ None</span></td>
+              <td><span class="comp-val-no">✗ None</span></td>
+              <td><span class="comp-val-no">✗ None</span></td>
             </tr>
             <tr>
-              <td>Monthly Licensing Fees</td>
-              <td class="brand-col"><span class="comp-val-yes" style="color: #25D366;">✓ Free Forever</span></td>
-              <td><span class="comp-val-no">✗ Paid ($49+/mo)</span></td>
-              <td><span class="comp-val-no">✗ Paid ($25+/mo)</span></td>
-              <td><span class="comp-val-no">✗ Paid ($15+/mo)</span></td>
+              <td>Automation Builder</td>
+              <td class="brand-col"><span class="comp-val-yes">✓ Full node library</span></td>
+              <td><span class="comp-val-yes">✓ Basic flows</span></td>
+              <td><span class="comp-val-no">✗ None</span></td>
+              <td><span class="comp-val-yes">✓ Basic CRM rules</span></td>
+            </tr>
+            <tr>
+              <td>Message Templates</td>
+              <td class="brand-col"><span class="comp-val-yes">✓ Native Meta Sync</span></td>
+              <td><span class="comp-val-yes">✓ Supported</span></td>
+              <td><span class="comp-val-no">✗ Manual only</span></td>
+              <td><span class="comp-val-no">✗ Limited</span></td>
+            </tr>
+            <tr>
+              <td>Broadcast / Bulk</td>
+              <td class="brand-col"><span class="comp-val-yes">✓ Per-recipient log</span></td>
+              <td><span class="comp-val-yes">✓ Supported</span></td>
+              <td><span class="comp-val-no">✗ None</span></td>
+              <td><span class="comp-val-yes">✓ Limited</span></td>
+            </tr>
+            <tr>
+              <td>Monthly Pricing</td>
+              <td class="brand-col"><span class="comp-val-yes">✓ Free Forever</span></td>
+              <td><span class="comp-val-no">✗ $49+/mo</span></td>
+              <td><span class="comp-val-no">✗ $25+/mo</span></td>
+              <td><span class="comp-val-no">✗ $15+/mo</span></td>
             </tr>
           </tbody>
         </table>
