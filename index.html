@@ -462,13 +462,14 @@
     *::-webkit-scrollbar { display: none; }
     * { scrollbar-width: none; -ms-overflow-style: none; box-sizing: border-box; margin: 0; padding: 0; }
     ::selection { background: var(--red); color: #fff; }
-    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     body {
       background: var(--black);
       color: var(--text);
       font-family: var(--font-body);
       line-height: 1.6;
       overflow-x: hidden;
+      max-width: 100vw;
       position: relative;
     }
     a { color: inherit; text-decoration: none; }
@@ -1544,52 +1545,639 @@
       background: var(--red-dim);
       border-color: rgba(229, 9, 20, 0.25);
     }
-    .mod-grid {
+    /* ─── NEW WORKFLOW BENTO LAYOUT (n8n-STYLE) ─── */
+    .modules-bento-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
+      grid-template-columns: 58fr 42fr;
+      gap: 1.5rem;
+      align-items: stretch;
+      margin-top: 1rem;
     }
-    .mod-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 20px;
-      transition: all 0.3s;
+    
+    /* LEFT SIDE: WORKFLOW CANVAS */
+    .workflow-canvas-container {
       position: relative;
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      background: rgba(12, 12, 13, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      height: 520px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--glass-glow);
     }
-    .mod-card:hover {
-      border-color: rgba(229, 9, 20, 0.2);
-      background: var(--dark);
-      transform: translateY(-2px);
+    html[data-theme="light"] .workflow-canvas-container {
+      background: rgba(255, 255, 255, 0.45);
+      border-color: rgba(0, 0, 0, 0.08);
     }
-    .mod-header {
+    .canvas-dot-grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 18px 18px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    html[data-theme="light"] .canvas-dot-grid {
+      background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+    }
+    
+    /* CANVAS NAV BAR / HEADER */
+    .canvas-nav-bar {
+      position: relative;
+      z-index: 5;
+      padding: 14px 20px;
+      background: rgba(5, 5, 5, 0.3);
+      border-bottom: 1px solid var(--glass-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
     }
-    .mod-badge {
-      font-family: var(--font-mono);
-      font-size: 9.5px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      text-transform: uppercase;
+    html[data-theme="light"] .canvas-nav-bar {
+      background: rgba(255, 255, 255, 0.5);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .cnb-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .cnb-title {
+      font-family: var(--font-title);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .cnb-desc {
+      font-size: 10.5px;
+      color: var(--text-dim);
+    }
+    .cnb-right {
+      display: flex;
+      gap: 6px;
+    }
+    .cnb-btn {
+      background: var(--gray);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      color: var(--text-dim);
+      font-size: 11px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+    }
+    .cnb-btn:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      color: var(--text);
+    }
+    html[data-theme="light"] .cnb-btn {
+      background: #e9e9ef;
+      border-color: rgba(0, 0, 0, 0.08);
+      color: var(--text);
+    }
+    html[data-theme="light"] .cnb-btn:hover {
+      background: #d0d0d8;
+    }
+    .cnb-btn.run {
+      background: rgba(37, 211, 102, 0.12);
+      color: #25D366;
+      border-color: rgba(37, 211, 102, 0.35);
       font-weight: 600;
     }
-    .mod-badge.core { background: rgba(34, 197, 94, 0.08); color: #4ade80; border: 1px solid rgba(34,197,94,0.15); }
-    .mod-badge.auto { background: var(--red-dim); color: var(--red-hi); border: 1px solid rgba(229,9,20,0.15); }
-    .mod-badge.broadcast { background: rgba(251, 191, 36, 0.08); color: #fbbf24; border: 1px solid rgba(251,191,36,0.15); }
-    .mod-badge.analytics { background: rgba(147, 51, 234, 0.08); color: #c084fc; border: 1px solid rgba(147,51,234,0.15); }
+    .cnb-btn.run:hover {
+      background: rgba(37, 211, 102, 0.22);
+      border-color: rgba(37, 211, 102, 0.5);
+    }
+    html[data-theme="light"] .cnb-btn.run {
+      background: rgba(21, 163, 74, 0.08);
+      color: #16a34a;
+      border-color: rgba(21, 163, 74, 0.25);
+    }
+    html[data-theme="light"] .cnb-btn.run:hover {
+      background: rgba(21, 163, 74, 0.15);
+    }
+    .cnb-btn.icon {
+      padding: 5px;
+      justify-content: center;
+      width: 25px;
+    }
+
+    /* CANVAS BODY AND ACTIVE WORKFLOW PANELS */
+    .canvas-content-area {
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+    .canvas-workflow {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.48s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .canvas-workflow.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
     
-    .mod-name { font-size: 14.5px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-    .mod-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-bottom: 12px; }
-    .mod-footer {
-      border-top: 1px dashed var(--glass-border);
-      padding-top: 8px;
-      font-family: var(--font-mono);
+    /* SVG CONNECTORS OVERLAY */
+    .canvas-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .connector-path {
+      fill: none;
+      stroke: var(--gray-hi);
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 6, 6;
+      animation: flow-dash 3s linear infinite;
+      transition: stroke 0.3s, filter 0.3s;
+    }
+    html[data-theme="light"] .connector-path {
+      stroke: #d0d0d8;
+    }
+    .connector-path.active-flow {
+      stroke: #25d366;
+      stroke-width: 2.25;
+      filter: drop-shadow(0 0 4px rgba(37, 211, 102, 0.45));
+    }
+    html[data-theme="light"] .connector-path.active-flow {
+      stroke: #16a34a;
+      filter: drop-shadow(0 0 4px rgba(22, 163, 74, 0.3));
+    }
+    @keyframes flow-dash {
+      to { stroke-dashoffset: -24; }
+    }
+    
+    /* n8n NODES */
+    .canvas-nodes {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .canvas-nodes * {
+      pointer-events: auto;
+    }
+    .canvas-node {
+      position: absolute;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      width: 145px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      user-select: none;
+    }
+    html[data-theme="light"] .canvas-node {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    }
+    .canvas-node:hover {
+      transform: translateY(-2px) scale(1.025);
+      border-color: rgba(229, 9, 20, 0.22);
+      box-shadow: 0 8px 24px rgba(229, 9, 20, 0.08);
+    }
+    
+    /* Category color highlights for nodes */
+    .canvas-node.node-core { border-left: 3px solid #25d366; }
+    .canvas-node.node-auto { border-left: 3px solid var(--red-hi); }
+    .canvas-node.node-broadcast { border-left: 3px solid #fbcb24; }
+    .canvas-node.node-analytics { border-left: 3px solid #c084fc; }
+    .canvas-node.node-webhook { border-left: 3px solid #7c3aed; }
+    
+    html[data-theme="light"] .canvas-node.node-core { border-left-color: #16a34a; }
+    html[data-theme="light"] .canvas-node.node-auto { border-left-color: var(--red); }
+    html[data-theme="light"] .canvas-node.node-broadcast { border-left-color: #d97706; }
+    html[data-theme="light"] .canvas-node.node-analytics { border-left-color: #7c3aed; }
+    html[data-theme="light"] .canvas-node.node-webhook { border-left-color: #5b21b6; }
+    
+    /* Node inner elements */
+    .node-icon-box {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-dim);
+      border: 1px solid var(--glass-border);
+    }
+    html[data-theme="light"] .node-icon-box {
+      background: #f0f2f5;
+      border-color: rgba(0, 0, 0, 0.05);
+      color: var(--text);
+    }
+    .canvas-node:hover .node-icon-box {
+      color: var(--text);
+    }
+    .node-icon-box.green { color: #25d366; background: rgba(37, 211, 102, 0.06); }
+    .node-icon-box.red { color: var(--red-hi); background: rgba(229, 9, 20, 0.06); }
+    .node-icon-box.yellow { color: #fbcb24; background: rgba(251, 203, 36, 0.06); }
+    .node-icon-box.purple { color: #c084fc; background: rgba(192, 132, 252, 0.06); }
+    .node-icon-box.indigo { color: #818cf8; background: rgba(129, 140, 248, 0.06); }
+    
+    html[data-theme="light"] .node-icon-box.green { color: #16a34a; background: rgba(22, 163, 74, 0.06); }
+    html[data-theme="light"] .node-icon-box.red { color: var(--red); background: rgba(229, 9, 20, 0.06); }
+    html[data-theme="light"] .node-icon-box.yellow { color: #d97706; background: rgba(217, 119, 6, 0.06); }
+    html[data-theme="light"] .node-icon-box.purple { color: #7c3aed; background: rgba(124, 58, 237, 0.06); }
+    html[data-theme="light"] .node-icon-box.indigo { color: #4f46e5; background: rgba(79, 70, 229, 0.06); }
+
+    .node-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .node-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .node-desc {
+      font-size: 9px;
+      color: var(--text-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* Connectors (in/out circles) */
+    .node-port {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gray-hi);
+      border: 1px solid var(--glass-border);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    html[data-theme="light"] .node-port {
+      background: #d0d0d8;
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+    .node-port.port-in { left: -4px; }
+    .node-port.port-out { right: -4px; }
+    
+    /* Checkmark status indicator on top right */
+    .node-indicator {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #15a34a;
+      border: 1px solid var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    html[data-theme="light"] .node-indicator {
+      border-color: #fff;
+    }
+    
+    /* Active animation pulse for nodes */
+    .canvas-node.pulse-node {
+      animation: node-pulse 0.6s ease-in-out;
+    }
+    @keyframes node-pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.06); box-shadow: 0 0 15px rgba(37, 211, 102, 0.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* ZOOM & LEGEND CONTROLS (FOOTER) */
+    .canvas-footer {
+      position: relative;
+      z-index: 5;
+      padding: 12px 20px;
+      background: rgba(5, 5, 5, 0.3);
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    html[data-theme="light"] .canvas-footer {
+      background: rgba(255, 255, 255, 0.5);
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .canvas-legend {
+      display: flex;
+      gap: 12px;
+    }
+    .lg-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
       font-size: 10px;
+      color: var(--text-dim);
+    }
+    .lg-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .lg-item.core .lg-dot { background: #25d366; }
+    .lg-item.auto .lg-dot { background: var(--red-hi); }
+    .lg-item.broadcast .lg-dot { background: #fbcb24; }
+    .lg-item.analytics .lg-dot { background: #c084fc; }
+    
+    html[data-theme="light"] .lg-item.core .lg-dot { background: #16a34a; }
+    html[data-theme="light"] .lg-item.auto .lg-dot { background: var(--red); }
+    html[data-theme="light"] .lg-item.broadcast .lg-dot { background: #d97706; }
+    html[data-theme="light"] .lg-item.analytics .lg-dot { background: #7c3aed; }
+    
+    .canvas-zoom {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .zoom-btn {
+      background: var(--gray);
+      border: 1px solid var(--glass-border);
+      border-radius: 4px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .zoom-btn:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      color: var(--text);
+    }
+    html[data-theme="light"] .zoom-btn {
+      background: #e9e9ef;
+      border-color: rgba(0, 0, 0, 0.08);
+      color: var(--text);
+    }
+    html[data-theme="light"] .zoom-btn:hover {
+      background: #d0d0d8;
+    }
+    .zoom-text {
+      font-size: 10px;
+      color: var(--text-dim);
+      min-width: 30px;
+      text-align: center;
+      font-family: var(--font-mono);
+    }
+
+    /* RIGHT COLUMN: MODULE GALLERY WRAPPER */
+    .module-gallery-wrapper {
+      display: flex;
+      flex-direction: column;
+      background: rgba(12, 12, 13, 0.45);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: var(--glass-glow);
+    }
+    html[data-theme="light"] .module-gallery-wrapper {
+      background: rgba(255, 255, 255, 0.55);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+    .gallery-info-header {
+      margin-bottom: 14px;
+    }
+    .gallery-title {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    html[data-theme="light"] .gallery-title {
+      color: var(--text);
+    }
+    .gallery-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+    
+    /* SEARCH AND DROPDOWN BAR */
+    .gallery-search-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .gs-input-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .gs-input-wrap svg {
+      position: absolute;
+      left: 10px;
       color: var(--text-dark);
     }
+    .gs-input-wrap input {
+      width: 100%;
+      background: rgba(5, 5, 5, 0.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 7px 10px 7px 30px;
+      color: var(--text);
+      font-size: 12px;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .gs-input-wrap input:focus {
+      border-color: rgba(229, 9, 20, 0.35);
+    }
+    html[data-theme="light"] .gs-input-wrap input {
+      background: #e9e9ef;
+      border-color: rgba(0, 0, 0, 0.08);
+      color: var(--text);
+    }
+    .gallery-search-bar select {
+      background: rgba(5, 5, 5, 0.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 7px 10px;
+      color: var(--text);
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+    html[data-theme="light"] .gallery-search-bar select {
+      background: #e9e9ef;
+      border-color: rgba(0, 0, 0, 0.08);
+      color: var(--text);
+    }
+    
+    /* GALLERY CARDS GRID (2 COLUMNS) */
+    .gallery-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+    .gallery-card {
+      background: rgba(12, 12, 13, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    html[data-theme="light"] .gallery-card {
+      background: rgba(255, 255, 255, 0.8);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+    .gallery-card:hover {
+      border-color: rgba(229, 9, 20, 0.15);
+      background: rgba(12, 12, 13, 0.8);
+    }
+    html[data-theme="light"] .gallery-card:hover {
+      background: #ffffff;
+      border-color: rgba(229, 9, 20, 0.2);
+    }
+    .gallery-card.selected {
+      border-color: rgba(229, 9, 20, 0.5);
+      background: rgba(229, 9, 20, 0.03);
+      box-shadow: 0 0 12px rgba(229, 9, 20, 0.05);
+    }
+    html[data-theme="light"] .gallery-card.selected {
+      background: rgba(229, 9, 20, 0.02);
+      border-color: var(--red);
+    }
+    .gallery-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .gallery-card-badge {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .gallery-card-badge.core { background: rgba(34, 197, 94, 0.08); color: #4ade80; border: 1px solid rgba(34,197,94,0.15); }
+    .gallery-card-badge.auto { background: var(--red-dim); color: var(--red-hi); border: 1px solid rgba(229,9,20,0.15); }
+    .gallery-card-badge.broadcast { background: rgba(251, 191, 36, 0.08); color: #fbbf24; border: 1px solid rgba(251,191,36,0.15); }
+    .gallery-card-badge.analytics { background: rgba(147, 51, 234, 0.08); color: #c084fc; border: 1px solid rgba(147,51,234,0.15); }
+    
+    html[data-theme="light"] .gallery-card-badge.core { background: rgba(22, 163, 74, 0.08); color: #16a34a; border-color: rgba(22,163,74,0.15); }
+    html[data-theme="light"] .gallery-card-badge.auto { background: var(--red-dim); color: var(--red); border-color: rgba(229,9,20,0.15); }
+    html[data-theme="light"] .gallery-card-badge.broadcast { background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217,119,6,0.15); }
+    html[data-theme="light"] .gallery-card-badge.analytics { background: rgba(124, 58, 237, 0.08); color: #7c3aed; border-color: rgba(124,58,237,0.15); }
+    
+    .gallery-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    html[data-theme="light"] .gallery-card-title {
+      color: var(--text);
+    }
+    .gallery-card-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .gallery-card-footer {
+      font-size: 9px;
+      color: var(--text-dark);
+      font-family: var(--font-mono);
+      border-top: 1px dashed var(--glass-border);
+      padding-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* THREE BOTTOM FEATURES */
+    .gallery-bottom-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 14px;
+    }
+    html[data-theme="light"] .gallery-bottom-features {
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+    .gbf-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .gbf-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+    html[data-theme="light"] .gbf-icon {
+      background: #e9e9ef;
+      border-color: rgba(0, 0, 0, 0.08);
+      color: var(--text);
+    }
+    .gbf-item h5 {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1px;
+    }
+    html[data-theme="light"] .gbf-item h5 {
+      color: var(--text);
+    }
+    .gbf-item p {
+      font-size: 9.5px;
+      color: var(--text-dim);
+      margin: 0;
+    }
+
 
     /* ─── LIVE DEV ROOM / DISCORD PANEL ─── */
     .dev-discord-sec {
@@ -2202,8 +2790,16 @@
         font-size: clamp(1.8rem, 8.5vw, 2.8rem);
         line-height: 1.1;
       }
-      .nav-links, .nav-act { display: none; }
+      .typed-line { white-space: normal; font-size: clamp(1.2rem, 6vw, 1.8rem); }
+      .nav-links { display: none; }
+      /* keep nav-act visible on mobile but hide the theme toggle to save space */
+      .nav-act { display: flex; gap: 8px; }
+      .nav-act .theme-toggle { display: none; }
       .ham { display: flex; }
+      /* star button compact on mobile — count always visible */
+      .gh-star-right { display: flex !important; }
+      .gh-star-left { padding: 5px 8px; font-size: 11px; }
+      .gh-star-right { padding: 5px 7px; font-size: 11px; }
       .hero-grid {
         grid-template-columns: 1fr;
         gap: 2.5rem;
@@ -4605,7 +5201,6 @@
     </div>
   </section>
 
-  <!-- ══ MODULAR SHOWCASE (FILTER GRID) ══ -->
   <section class="sec" id="modules">
     <div class="container">
       <div class="sec-header rv">
@@ -4614,85 +5209,185 @@
         <p class="sec-desc">Enable only the components you need. Build the ultimate customer-facing setup without vendor lock-in or licensing bloat.</p>
       </div>
 
-      <div class="module-showcase">
-        <!-- Filtering Tabs -->
-        <div class="mod-tabs rv">
-          <div class="mod-tab active" onclick="filterModules('all')">All Modules</div>
-          <div class="mod-tab" onclick="filterModules('core')">Core Essentials</div>
-          <div class="mod-tab" onclick="filterModules('auto')">Automation Flows</div>
-          <div class="mod-tab" onclick="filterModules('broadcast')">Campaigns</div>
-          <div class="mod-tab" onclick="filterModules('analytics')">Insights</div>
+      <!-- Category Filter Tabs -->
+      <div class="mod-tabs rv">
+        <div class="mod-tab active" onclick="filterModules('all')">All Modules</div>
+        <div class="mod-tab" onclick="filterModules('core')">Core Essentials</div>
+        <div class="mod-tab" onclick="filterModules('auto')">Automation Flows</div>
+        <div class="mod-tab" onclick="filterModules('broadcast')">Campaigns</div>
+        <div class="mod-tab" onclick="filterModules('analytics')">Insights</div>
+      </div>
+
+      <div class="modules-bento-layout rv" style="animation-delay: 0.1s;">
+        
+        <!-- Left Column: Live Automation Canvas (n8n-style) -->
+        <div class="workflow-canvas-container">
+          <div class="canvas-dot-grid"></div>
+          <div class="canvas-nav-bar">
+            <div class="cnb-left">
+              <span class="cnb-title">Live Automation Canvas</span>
+              <span class="cnb-desc">Interactive workflow simulation</span>
+            </div>
+            <div class="cnb-right">
+              <button class="cnb-btn run" id="btnRunWorkflow">
+                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 11px; height: 11px; margin-right: 4px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Run
+              </button>
+              <button class="cnb-btn icon" onclick="resetZoom()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Rendered workflows container -->
+          <div class="canvas-content-area" id="canvasWorkflowArea">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Legend and Zoom Controls -->
+          <div class="canvas-footer">
+            <div class="canvas-legend">
+              <span class="lg-item core"><span class="lg-dot"></span>Core</span>
+              <span class="lg-item auto"><span class="lg-dot"></span>Automation</span>
+              <span class="lg-item broadcast"><span class="lg-dot"></span>Campaigns</span>
+              <span class="lg-item analytics"><span class="lg-dot"></span>Insights</span>
+            </div>
+            <div class="canvas-zoom">
+              <button class="zoom-btn" onclick="adjustZoom(-0.15)">-</button>
+              <span class="zoom-text" id="zoomValText">100%</span>
+              <button class="zoom-btn" onclick="adjustZoom(0.15)">+</button>
+              <button class="zoom-btn lock" id="btnLockCanvas" onclick="toggleCanvasLock()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 10px; height: 10px;" id="lockIcon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </button>
+            </div>
+          </div>
         </div>
 
-        <!-- Grid of modules -->
-        <div class="mod-grid rv" id="modulesGrid">
-          
-          <!-- Home Dashboard -->
-          <div class="mod-card tilt-card" data-cat="core">
-            <div class="mod-header">
-              <span class="mod-badge core">Core</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            </div>
-            <h4 class="mod-name">Home Dashboard</h4>
-            <p class="mod-desc">Visual KPI metrics tiles, automated lead funnel flow charts, and messaging volume trend lines.</p>
-            <div class="mod-footer">Single User Scope Limit</div>
+        <!-- Right Column: Module Gallery -->
+        <div class="module-gallery-wrapper">
+          <div class="gallery-info-header">
+            <h3 class="gallery-title">Module Gallery</h3>
+            <p class="gallery-desc">Click a module card below to preview its live workflow configuration on the canvas.</p>
           </div>
 
-          <!-- Chats Inbox -->
-          <div class="mod-card tilt-card" data-cat="core">
-            <div class="mod-header">
-              <span class="mod-badge core">Core</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div class="gallery-search-bar">
+            <div class="gs-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="gallerySearchInput" placeholder="Search modules..." oninput="handleGallerySearch()">
             </div>
-            <h4 class="mod-name">Chats Inbox</h4>
-            <p class="mod-desc">Interactive live messaging with support for rich images, videos, PDF documents, and template syncs.</p>
-            <div class="mod-footer">Polling Fetch • No Reactions</div>
+            <select id="galleryCategorySelect" onchange="handleGalleryFilterDropdown()">
+              <option value="all">All Category</option>
+              <option value="core">Core Essentials</option>
+              <option value="auto">Automation Flows</option>
+              <option value="broadcast">Campaigns</option>
+              <option value="analytics">Insights</option>
+            </select>
           </div>
 
-          <!-- Flow Builder -->
-          <div class="mod-card tilt-card" data-cat="auto">
-            <div class="mod-header">
-              <span class="mod-badge auto">Automation</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <!-- 6 Module Cards Stacked/Grid -->
+          <div class="gallery-cards-grid" id="galleryCardsGrid">
+            
+            <!-- Home Dashboard -->
+            <div class="gallery-card tilt-card selected" data-cat="core" data-module="home-dashboard" onclick="selectModuleCard('home-dashboard')">
+              <div class="gallery-card-header">
+                <span class="gallery-card-badge core">Core</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              </div>
+              <div class="gallery-card-body">
+                <h4 class="gallery-card-title">Home Dashboard</h4>
+                <p class="gallery-card-desc">Visual KPI metrics tiles, automated lead funnel flow charts, and messaging volume trend lines.</p>
+              </div>
+              <div class="gallery-card-footer">Single User Scope Limit</div>
             </div>
-            <h4 class="mod-name">Flow Builder</h4>
-            <p class="mod-desc">Keyword trigger mapping. Create conditional response templates and route leads instantly.</p>
-            <div class="mod-footer">2 Core Linear Nodes Limit</div>
+
+            <!-- Chats Inbox -->
+            <div class="gallery-card tilt-card" data-cat="core" data-module="chats-inbox" onclick="selectModuleCard('chats-inbox')">
+              <div class="gallery-card-header">
+                <span class="gallery-card-badge core">Core</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="gallery-card-body">
+                <h4 class="gallery-card-title">Chats Inbox</h4>
+                <p class="gallery-card-desc">Interactive live messaging with support for rich images, videos, PDF documents, and template syncs.</p>
+              </div>
+              <div class="gallery-card-footer">Polling Fetch • No Reactions</div>
+            </div>
+
+            <!-- Flow Builder -->
+            <div class="gallery-card tilt-card" data-cat="auto" data-module="flow-builder" onclick="selectModuleCard('flow-builder')">
+              <div class="gallery-card-header">
+                <span class="gallery-card-badge auto">Automation</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div class="gallery-card-body">
+                <h4 class="gallery-card-title">Flow Builder</h4>
+                <p class="gallery-card-desc">Keyword trigger mapping. Create conditional response templates and route leads instantly.</p>
+              </div>
+              <div class="gallery-card-footer">2 Core Linear Nodes Limit</div>
+            </div>
+
+            <!-- AI Smart Replies -->
+            <div class="gallery-card tilt-card" data-cat="auto" data-module="ai-smart-replies" onclick="selectModuleCard('ai-smart-replies')">
+              <div class="gallery-card-header">
+                <span class="gallery-card-badge auto">Automation</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+              </div>
+              <div class="gallery-card-body">
+                <h4 class="gallery-card-title">AI Smart Replies</h4>
+                <p class="gallery-card-desc">Integrate LLM tokens to suggest quick context-specific support answers to human agents.</p>
+              </div>
+              <div class="gallery-card-footer">Pro Add-On Feature</div>
+            </div>
+
+            <!-- Broadcast Blast -->
+            <div class="gallery-card tilt-card" data-cat="broadcast" data-module="broadcast-blast" onclick="selectModuleCard('broadcast-blast')">
+              <div class="gallery-card-header">
+                <span class="gallery-card-badge broadcast">Campaigns</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </div>
+              <div class="gallery-card-body">
+                <h4 class="gallery-card-title">Broadcast Blast</h4>
+                <p class="gallery-card-desc">Deliver thousands of approved template messages with custom audience tagging filters.</p>
+              </div>
+              <div class="gallery-card-footer">Standard Variable Sync</div>
+            </div>
+
+            <!-- Metric Insights -->
+            <div class="gallery-card tilt-card" data-cat="analytics" data-module="metric-insights" onclick="selectModuleCard('metric-insights')">
+              <div class="gallery-card-header">
+                <span class="gallery-card-badge analytics">Insights</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <div class="gallery-card-body">
+                <h4 class="gallery-card-title">Metric Insights</h4>
+                <p class="gallery-card-desc">Visualize delivery ratios, active template popularity stats, and user conversion curves.</p>
+              </div>
+              <div class="gallery-card-footer">30-day History limit</div>
+            </div>
+
           </div>
 
-          <!-- AI Assistant -->
-          <div class="mod-card tilt-card" data-cat="auto">
-            <div class="mod-header">
-              <span class="mod-badge auto">Automation</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+          <div class="gallery-bottom-features">
+            <div class="gbf-item">
+              <div class="gbf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+              <div>
+                <h5>Open Source First</h5>
+                <p>Transparent. Customizable. Community-driven.</p>
+              </div>
             </div>
-            <h4 class="mod-name">AI Smart Replies</h4>
-            <p class="mod-desc">Integrate LLM tokens to suggest quick context-specific support answers to human agents.</p>
-            <div class="mod-footer">Pro Add-On Feature</div>
-          </div>
-
-          <!-- Broadcast Hub -->
-          <div class="mod-card tilt-card" data-cat="broadcast">
-            <div class="mod-header">
-              <span class="mod-badge broadcast">Campaigns</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <div class="gbf-item">
+              <div class="gbf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div>
+                <h5>Self Hostable</h5>
+                <p>Own your data. Full control.</p>
+              </div>
             </div>
-            <h4 class="mod-name">Broadcast Blast</h4>
-            <p class="mod-desc">Deliver thousands of approved template messages with custom audience tagging filters.</p>
-            <div class="mod-footer">Standard Variable Sync</div>
-          </div>
-
-          <!-- Live Analytics -->
-          <div class="mod-card tilt-card" data-cat="analytics">
-            <div class="mod-header">
-              <span class="mod-badge analytics">Insights</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <div class="gbf-item">
+              <div class="gbf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+              <div>
+                <h5>Built for Everyone</h5>
+                <p>From indie hackers to enterprises.</p>
+              </div>
             </div>
-            <h4 class="mod-name">Metric Insights</h4>
-            <p class="mod-desc">Visualize delivery ratios, active template popularity stats, and user conversion curves.</p>
-            <div class="mod-footer">30-day History limit</div>
           </div>
-
         </div>
       </div>
     </div>
