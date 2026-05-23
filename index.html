@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ForgeCRM — Open Source WhatsApp Business CRM by Forgemind</title>
+  <title>ForgeCHAT — Open Source WhatsApp Business CHAT by Forgemind</title>
   <!-- Modern Typography and Code Font -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
   <script>
@@ -289,6 +289,9 @@
       box-shadow: 0 6px 24px rgba(0,0,0,0.05);
     }
     html[data-theme="light"] .github-star-card { border-color: rgba(0,0,0,0.1); }
+    @media (max-width: 768px) {
+      html[data-theme="light"] .github-star-card { border-top-color: rgba(0,0,0,0.1); }
+    }
 
     /* ─── LIGHT MODE: COMPARISON TABLE ─── */
     html[data-theme="light"] .comp-table { background: var(--dark); }
@@ -1033,6 +1036,22 @@
       }
       50% {
         transform: rotateX(12deg) rotateY(-12deg) rotateZ(4deg) translateY(-14px);
+      }
+    }
+    @keyframes floatPhoneMobile {
+      0%, 100% {
+        transform: scale(0.82) rotateX(10deg) rotateY(-14deg) rotateZ(3deg) translateY(0);
+      }
+      50% {
+        transform: scale(0.82) rotateX(12deg) rotateY(-12deg) rotateZ(4deg) translateY(-14px);
+      }
+    }
+    @keyframes floatPhoneXS {
+      0%, 100% {
+        transform: scale(0.72) rotateX(10deg) rotateY(-14deg) rotateZ(3deg) translateY(0);
+      }
+      50% {
+        transform: scale(0.72) rotateX(12deg) rotateY(-12deg) rotateZ(4deg) translateY(-14px);
       }
     }
 
@@ -2540,6 +2559,9 @@
       .module-gallery-wrapper.gallery-fixed-height {
         height: auto !important;
         max-height: none !important;
+        min-width: 0;
+        width: 100%;
+        overflow-x: hidden;
       }
       .workflow-canvas-container {
         height: auto !important;
@@ -2556,7 +2578,14 @@
     }
     @media (max-width: 600px) {
       .gallery-cards-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        min-width: 0;
+      }
+      .gallery-card {
+        padding: 10px 10px;
+        min-width: 0;
+        overflow: hidden;
       }
     }
 
@@ -3168,6 +3197,7 @@
       }
     }
     @media (max-width: 768px) {
+      .sec { padding: 3rem 0; }
       .hero-h1 {
         font-size: clamp(1.8rem, 8.5vw, 2.8rem);
         line-height: 1.1;
@@ -3188,14 +3218,15 @@
       }
       .hero-center {
         order: initial;
-        margin-bottom: 0;
+        margin-bottom: 3.5rem; /* push cards down, resolving 3D overlap */
       }
       .phone-frame {
         margin: 0 auto;
+        animation: floatPhoneMobile 6.5s ease-in-out infinite;
       }
       .phone-pedestal {
-        width: 320px;
-        height: 320px;
+        width: 270px;
+        height: 270px;
         top: 50%;
       }
       .community-feed {
@@ -3229,13 +3260,13 @@
     }
     @media (max-width: 360px) {
       .phone-frame {
-        transform: scale(0.9);
+        animation: floatPhoneXS 6.5s ease-in-out infinite;
         transform-origin: top center;
-        margin-bottom: -50px;
+        margin-bottom: 0;
       }
       .phone-pedestal {
-        width: 280px;
-        height: 280px;
+        width: 220px;
+        height: 220px;
         top: 50%;
       }
     }
@@ -4889,6 +4920,44 @@
       .workflow-canvas-container { display: none; }
       /* hide module filter tabs on mobile */
       .mod-tabs { display: none; }
+      /* footer command bar: stack vertically, full-width copy box */
+      .cmd-bar-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 18px;
+      }
+      .cmd-copy-box {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        padding: 10px 10px 10px 12px;
+        flex-wrap: nowrap;
+      }
+      .cmd-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 11px;
+      }
+      /* completion banner: stack vertically on mobile */
+      .completion-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 18px;
+      }
+      .banner-right { width: 100%; }
+      .github-star-card {
+        border-left: none;
+        border-top: 1.5px solid rgba(255, 255, 255, 0.06);
+        padding-left: 0;
+        padding-top: 14px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
     }
 
     /* ─── PAGE LOAD FADE ─── */
@@ -4923,9 +4992,9 @@
       pointer-events: none;
       z-index: 9999;
       top: 0; left: 0;
-      transform: translate(-50%,-50%);
+      transform: translate(-200vw, -200vh);
       transition: width 0.18s, height 0.18s, background 0.18s, opacity 0.2s;
-      will-change: left, top;
+      will-change: transform;
     }
     #cursor-ring {
       position: fixed;
@@ -4935,11 +5004,11 @@
       pointer-events: none;
       z-index: 9998;
       top: 0; left: 0;
-      transform: translate(-50%,-50%);
+      transform: translate(-200vw, -200vh);
       transition: width 0.22s cubic-bezier(0.16,1,0.3,1),
                   height 0.22s cubic-bezier(0.16,1,0.3,1),
                   border-color 0.22s, opacity 0.2s;
-      will-change: left, top;
+      will-change: transform;
     }
     .cursor-hover  #cursor-ring { width: 52px; height: 52px; border-color: rgba(229,9,20,0.72); }
     .cursor-hover  #cursor-dot  { width: 8px; height: 8px; }
@@ -5043,7 +5112,7 @@
         <div class="brand-logo">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 270" role="img" aria-label="ForgeMind AI"><defs><clipPath id="fm-socket-L"><path d="M125.1 160.759V141.079C125.1 140.378 124.733 139.729 124.133 139.367L102.033 126.03C100.7 125.226 99 126.186 99 127.743V147.804C99 148.514 99.3762 149.171 99.9886 149.53L122.089 162.485C123.422 163.266 125.1 162.305 125.1 160.759Z"/></clipPath><clipPath id="fm-socket-R"><path d="M146.7 160.759V141.079C146.7 140.378 147.067 139.729 147.667 139.367L169.767 126.03C171.1 125.226 172.8 126.186 172.8 127.743V147.804C172.8 148.514 172.424 149.171 171.811 149.53L149.711 162.485C148.378 163.266 146.7 162.305 146.7 160.759Z"/></clipPath><style>@keyframes fmBlink{0%,38%,46%,100%{transform:scaleY(1)}41%,43%{transform:scaleY(0.05)}}.fm-blink{animation:fmBlink 2.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}</style></defs><path d="M132.5 17.2168C134.047 16.3237 135.953 16.3237 137.5 17.2168L235.753 73.9434C237.3 74.8365 238.253 76.4871 238.253 78.2734V191.727C238.253 193.513 237.3 195.163 235.753 196.057L137.5 252.783C135.953 253.676 134.047 253.676 132.5 252.783L34.2471 196.057C32.7001 195.163 31.7471 193.513 31.7471 191.727V78.2734C31.7471 76.4871 32.7001 74.8365 34.2471 73.9434L132.5 17.2168Z" fill="#111111" stroke="#111111" stroke-width="2" stroke-linejoin="round"/><path d="M132.5 24C133.8 23.27 136.2 23.27 137.5 24L229.5 76.5C230.8 77.23 231.5 78.62 231.5 80.08V189.92C231.5 191.38 230.8 192.77 229.5 193.5L137.5 246C136.2 246.73 133.8 246.73 132.5 246L40.5 193.5C39.2 192.77 38.5 191.38 38.5 189.92V80.08C38.5 78.62 39.2 77.23 40.5 76.5L132.5 24Z" fill="#fff"/><path d="M132.5 50C133.8 49.27 136.2 49.27 137.5 50L207 92C208.3 92.73 209 94.12 209 95.58V174.42C209 175.88 208.3 177.27 207 178L137.5 220C136.2 220.73 133.8 220.73 132.5 220L63 178C61.7 177.27 61 175.88 61 174.42V95.58C61 94.12 61.7 92.73 63 92L132.5 50Z" fill="#111111" stroke="#111111" stroke-width="2" stroke-linejoin="round"/><path d="M135.26 53.6155L101.777 73.606C100.496 74.3708 100.473 76.2184 101.735 77.0146L117.047 86.6768C117.693 87.0841 118.514 87.0886 119.163 86.6883L136.596 75.95C137.263 75.5394 138.107 75.5555 138.758 75.9912L159.388 89.8084C160.59 90.6133 160.567 92.3884 159.344 93.1609L133.581 109.437C132.953 109.834 132.157 109.85 131.513 109.478L86.897 83.729C86.2908 83.3792 85.5459 83.3717 84.9328 83.7092L65.0356 94.6617C64.3968 95.0133 64 95.6846 64 96.4138V174.378C64 175.085 64.3731 175.739 64.9814 176.099L134.336 217.145C134.966 217.518 135.75 217.517 136.378 217.142L205.274 176.1C205.879 175.739 206.25 175.087 206.25 174.382V113.114C206.25 111.568 204.57 110.606 203.236 111.39L186.715 121.105C186.104 121.464 185.729 122.12 185.729 122.829V161.881C185.729 162.57 185.374 163.21 184.791 163.576L136.396 193.895C135.759 194.294 134.952 194.303 134.307 193.916L83.6283 163.57C83.025 163.209 82.6557 162.558 82.6557 161.854V107.578C82.6557 106.024 84.3501 105.064 85.6832 105.862L134.356 135.007C134.975 135.378 135.746 135.386 136.373 135.029L203.287 96.9194C204.614 96.1634 204.638 94.2587 203.33 93.4693L137.319 53.6205C136.686 53.2386 135.895 53.2367 135.26 53.6155Z" fill="#D10D02" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/><path d="M120.6 91.8L97.2 76.95L91.35 80.55L132.75 104.4L152.55 91.8L137.25 81.45L120.6 91.8Z" fill="#111111" stroke="#111111" stroke-width="4" stroke-linejoin="round"/><path d="M134.442 139.793L92.1314 114.325C90.7984 113.522 89.1 114.482 89.1 116.038V157.72C89.1 158.421 89.4675 159.071 90.0685 159.433L134.392 186.113C135.041 186.504 135.854 186.495 136.493 186.09L178.619 159.439C179.199 159.072 179.55 158.434 179.55 157.749V121.732C179.55 121.03 179.919 120.379 180.521 120.017L203.329 106.333C203.931 105.971 204.3 105.32 204.3 104.618V104.258C204.3 102.719 202.636 101.757 201.303 102.524L136.47 139.813C135.841 140.175 135.064 140.168 134.442 139.793Z" fill="#111111" stroke="#111111" stroke-width="5" stroke-linejoin="round"/><path d="M125.1 160.759V141.079C125.1 140.378 124.733 139.729 124.133 139.367L102.033 126.03C100.7 125.226 99 126.186 99 127.743V147.804C99 148.514 99.3762 149.171 99.9886 149.53L122.089 162.485C123.422 163.266 125.1 162.305 125.1 160.759Z" fill="#111111"/><path d="M146.7 160.759V141.079C146.7 140.378 147.067 139.729 147.667 139.367L169.767 126.03C171.1 125.226 172.8 126.186 172.8 127.743V147.804C172.8 148.514 172.424 149.171 171.811 149.53L149.711 162.485C148.378 163.266 146.7 162.305 146.7 160.759Z" fill="#111111"/><g clip-path="url(#fm-socket-L)"><g class="fm-blink" style="transform-origin:112px 143.9px"><path d="M125.1 160.759V141.079C125.1 140.378 124.733 139.729 124.133 139.367L102.033 126.03C100.7 125.226 99 126.186 99 127.743V147.804C99 148.514 99.3762 149.171 99.9886 149.53L122.089 162.485C123.422 163.266 125.1 162.305 125.1 160.759Z" fill="#fff" transform="translate(112,143.9) scale(0.93) translate(-112,-143.9)"/></g></g><g clip-path="url(#fm-socket-R)"><g class="fm-blink" style="transform-origin:159.75px 143.9px"><path d="M146.7 160.759V141.079C146.7 140.378 147.067 139.729 147.667 139.367L169.767 126.03C171.1 125.226 172.8 126.186 172.8 127.743V147.804C172.8 148.514 172.424 149.171 171.811 149.53L149.711 162.485C148.378 163.266 146.7 162.305 146.7 160.759Z" fill="#fff" transform="translate(159.75,143.9) scale(0.93) translate(-159.75,-143.9)"/></g></g></svg>
         </div>
-        <div class="brand-name">FORGE<span>CRM</span> <span style="font-size:10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(37, 211, 102, 0.12); color: #25D366; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(37, 211, 102, 0.22); vertical-align: middle; margin-left: 6px;">WhatsApp</span></div>
+        <div class="brand-name">FORGE<span>CHAT</span> <span style="font-size:10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(37, 211, 102, 0.12); color: #25D366; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(37, 211, 102, 0.22); vertical-align: middle; margin-left: 6px;">WhatsApp</span></div>
       </div>
 
       <ul class="nav-links">
@@ -5055,7 +5124,7 @@
 
       <div class="nav-act">
         <div class="gh-star-btn">
-          <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="gh-star-left" aria-label="Star ForgeCRM on GitHub">
+          <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="gh-star-left" aria-label="Star ForgeCHAT on GitHub">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
             Star
           </a>
@@ -5116,12 +5185,12 @@
         
         <!-- Left Column -->
         <div class="hero-left rv">
-          <div class="sec-tag" style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;"><span class="pulse-dot" style="background: #25D366; box-shadow: 0 0 8px #25D366;"></span> WhatsApp Business CRM &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; v1.0</div>
+          <div class="sec-tag" style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;"><span class="pulse-dot" style="background: #25D366; box-shadow: 0 0 8px #25D366;"></span> WhatsApp Business CHAT &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; v1.0</div>
           <h1 class="hero-h1">
             <span style="white-space: nowrap;">Build. Connect.</span><br>
             <span class="gradient-red typed-line"><span id="heroTyped"></span></span>
           </h1>
-          <p class="hero-p">ForgeCRM is a modern, self-hosted, open-source CRM built to run your entire customer communication over the WhatsApp Business Cloud API. Connect your Meta developer account, automate conversations, coordinate your support team, and broadcast campaigns — all with zero licensing fees.</p>
+          <p class="hero-p">ForgeCHAT is a modern, self-hosted, open-source CHAT platform built to run your entire customer communication over the WhatsApp Business Cloud API. Connect your Meta developer account, automate conversations, coordinate your support team, and broadcast campaigns — all with zero licensing fees.</p>
           
           <div class="hero-ctas">
             <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="btn btn-red btn-lg">
@@ -5188,7 +5257,7 @@
                 </div>
                 <div class="chat-user">
                   <span class="chat-name" style="display:flex; align-items:center; gap:4px; font-size:10.5px;">
-                    ForgeCRM Client
+                    ForgeCHAT Client
                     <svg viewBox="0 0 24 24" width="11" height="11" fill="#25D366"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                   </span>
                   <span class="chat-status" style="color: #25D366;">online</span>
@@ -5198,7 +5267,7 @@
               <!-- Chat Body (Typewriter Staggered Bubbles) -->
               <div class="chat-body" id="chatBody">
                 <div class="chat-bubble bot msg-1">Hi there! Welcome to our official WhatsApp Business channel. 💬</div>
-                <div class="chat-bubble bot msg-2" style="animation-delay: 1.4s;">How can we serve you today? ForgeCRM is fully connected.</div>
+                <div class="chat-bubble bot msg-2" style="animation-delay: 1.4s;">How can we serve you today? ForgeCHAT is fully connected.</div>
                 <div class="chat-bubble user msg-3" style="animation-delay: 2.8s;">I'd like to check my live stats.</div>
                 <div class="chat-bubble bot msg-4" style="animation-delay: 4s;">Sure! Retrieving real-time WhatsApp Cloud API stats:</div>
                 
@@ -5310,7 +5379,7 @@
               </div>
               <div class="osc-text">
                 <h4>Open Source. Built for Developers.</h4>
-                <p>ForgeCRM is 100% open source under the MIT License. Contributions, ideas, and feedback are always welcome.</p>
+                <p>ForgeCHAT is 100% open source under the MIT License. Contributions, ideas, and feedback are always welcome.</p>
               </div>
             </div>
             <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="btn btn-red btn-sm">
@@ -5877,7 +5946,7 @@
     <div class="container">
       <div class="sec-header rv">
         <div class="sec-tag"><span class="pulse-dot"></span>Compare</div>
-        <h2 class="sec-title"><span>Why Developers Choose</span> <span class="highlight">ForgeCRM</span></h2>
+        <h2 class="sec-title"><span>Why Developers Choose</span> <span class="highlight">ForgeCHAT</span></h2>
         <p class="sec-desc">A side-by-side architectural and pricing breakdown showing why self-hosting our MIT platform outperforms locked-in vendor suites.</p>
       </div>
 
@@ -5886,7 +5955,7 @@
           <thead>
             <tr>
               <th>Feature</th>
-              <th class="brand-col">ForgeCRM (Self-Hosted)</th>
+              <th class="brand-col">ForgeCHAT (Self-Hosted)</th>
               <th>Wati (SaaS)</th>
               <th>360Dialog (API Proxy)</th>
               <th>Kommo (SaaS CRM)</th>
@@ -5926,7 +5995,7 @@
               <td class="brand-col"><span class="comp-val-yes">✓ Full node library</span></td>
               <td><span class="comp-val-yes">✓ Basic flows</span></td>
               <td><span class="comp-val-no">✗ None</span></td>
-              <td><span class="comp-val-yes">✓ Basic CRM rules</span></td>
+              <td><span class="comp-val-yes">✓ Basic CHAT rules</span></td>
             </tr>
             <tr>
               <td>Message Templates</td>
@@ -5969,7 +6038,7 @@
           
           <h2 class="dev-sec-title">Get Started <br>in <span class="highlight-red">Minutes</span></h2>
           
-          <p class="dev-sec-desc">Launch your self-hosted WhatsApp CRM panel in 5 simple commands. Everything is configured using straightforward environments.</p>
+          <p class="dev-sec-desc">Launch your self-hosted WhatsApp CHAT panel in 5 simple commands. Everything is configured using straightforward environments.</p>
           
           <!-- Metadata status badges -->
           <div class="sec-badges">
@@ -6011,7 +6080,7 @@
                       <span class="console-win-dot y"></span>
                       <span class="console-win-dot g"></span>
                     </div>
-                    <div class="console-win-tab">terminal — forgecrm console</div>
+                    <div class="console-win-tab">terminal — forgechat console</div>
                   </div>
                   <div class="console-win-body" id="consoleBody">
                     <span style="color: #6b7280; font-style: italic;"># Waiting for command initiation...</span><br>
@@ -6145,7 +6214,7 @@
               </div>
               <div class="banner-text">
                 <h3>All set. You're ready to build.</h3>
-                <p>Your WhatsApp CRM backend is up and running. Explore, customize, and scale without limits.</p>
+                <p>Your WhatsApp CHAT backend is up and running. Explore, customize, and scale without limits.</p>
               </div>
             </div>
             <div class="banner-right">
@@ -6208,7 +6277,7 @@
       <!-- Copy command card bar -->
       <div class="cmd-bar-card rv">
         <div class="cbc-text">
-          <h4>Ready to build the future of WhatsApp Business CRM?</h4>
+          <h4>Ready to build the future of WhatsApp Business CHAT?</h4>
           <p>Clone the official repository, join the builder guild, and start deploying today.</p>
         </div>
         <div class="cmd-copy-box">
@@ -6224,9 +6293,9 @@
             <div class="brand-logo">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 270" role="img" aria-label="ForgeMind AI"><defs><clipPath id="fm-socket-L2"><path d="M125.1 160.759V141.079C125.1 140.378 124.733 139.729 124.133 139.367L102.033 126.03C100.7 125.226 99 126.186 99 127.743V147.804C99 148.514 99.3762 149.171 99.9886 149.53L122.089 162.485C123.422 163.266 125.1 162.305 125.1 160.759Z"/></clipPath><clipPath id="fm-socket-R2"><path d="M146.7 160.759V141.079C146.7 140.378 147.067 139.729 147.667 139.367L169.767 126.03C171.1 125.226 172.8 126.186 172.8 127.743V147.804C172.8 148.514 172.424 149.171 171.811 149.53L149.711 162.485C148.378 163.266 146.7 162.305 146.7 160.759Z"/></clipPath></defs><path d="M132.5 17.2168C134.047 16.3237 135.953 16.3237 137.5 17.2168L235.753 73.9434C237.3 74.8365 238.253 76.4871 238.253 78.2734V191.727C238.253 193.513 237.3 195.163 235.753 196.057L137.5 252.783C135.953 253.676 134.047 253.676 132.5 252.783L34.2471 196.057C32.7001 195.163 31.7471 193.513 31.7471 191.727V78.2734C31.7471 76.4871 32.7001 74.8365 34.2471 73.9434L132.5 17.2168Z" fill="#111111" stroke="#111111" stroke-width="2" stroke-linejoin="round"/><path d="M132.5 24C133.8 23.27 136.2 23.27 137.5 24L229.5 76.5C230.8 77.23 231.5 78.62 231.5 80.08V189.92C231.5 191.38 230.8 192.77 229.5 193.5L137.5 246C136.2 246.73 133.8 246.73 132.5 246L40.5 193.5C39.2 192.77 38.5 191.38 38.5 189.92V80.08C38.5 78.62 39.2 77.23 40.5 76.5L132.5 24Z" fill="#fff"/><path d="M132.5 50C133.8 49.27 136.2 49.27 137.5 50L207 92C208.3 92.73 209 94.12 209 95.58V174.42C209 175.88 208.3 177.27 207 178L137.5 220C136.2 220.73 133.8 220.73 132.5 220L63 178C61.7 177.27 61 175.88 61 174.42V95.58C61 94.12 61.7 92.73 63 92L132.5 50Z" fill="#111111" stroke="#111111" stroke-width="2" stroke-linejoin="round"/><path d="M135.26 53.6155L101.777 73.606C100.496 74.3708 100.473 76.2184 101.735 77.0146L117.047 86.6768C117.693 87.0841 118.514 87.0886 119.163 86.6883L136.596 75.95C137.263 75.5394 138.107 75.5555 138.758 75.9912L159.388 89.8084C160.59 90.6133 160.567 92.3884 159.344 93.1609L133.581 109.437C132.953 109.834 132.157 109.85 131.513 109.478L86.897 83.729C86.2908 83.3792 85.5459 83.3717 84.9328 83.7092L65.0356 94.6617C64.3968 95.0133 64 95.6846 64 96.4138V174.378C64 175.085 64.3731 175.739 64.9814 176.099L134.336 217.145C134.966 217.518 135.75 217.517 136.378 217.142L205.274 176.1C205.879 175.739 206.25 175.087 206.25 174.382V113.114C206.25 111.568 204.57 110.606 203.236 111.39L186.715 121.105C186.104 121.464 185.729 122.12 185.729 122.829V161.881C185.729 162.57 185.374 163.21 184.791 163.576L136.396 193.895C135.759 194.294 134.952 194.303 134.307 193.916L83.6283 163.57C83.025 163.209 82.6557 162.558 82.6557 161.854V107.578C82.6557 106.024 84.3501 105.064 85.6832 105.862L134.356 135.007C134.975 135.378 135.746 135.386 136.373 135.029L203.287 96.9194C204.614 96.1634 204.638 94.2587 203.33 93.4693L137.319 53.6205C136.686 53.2386 135.895 53.2367 135.26 53.6155Z" fill="#D10D02" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/><path d="M120.6 91.8L97.2 76.95L91.35 80.55L132.75 104.4L152.55 91.8L137.25 81.45L120.6 91.8Z" fill="#111111" stroke="#111111" stroke-width="4" stroke-linejoin="round"/><path d="M134.442 139.793L92.1314 114.325C90.7984 113.522 89.1 114.482 89.1 116.038V157.72C89.1 158.421 89.4675 159.071 90.0685 159.433L134.392 186.113C135.041 186.504 135.854 186.495 136.493 186.09L178.619 159.439C179.199 159.072 179.55 158.434 179.55 157.749V121.732C179.55 121.03 179.919 120.379 180.521 120.017L203.329 106.333C203.931 105.971 204.3 105.32 204.3 104.618V104.258C204.3 102.719 202.636 101.757 201.303 102.524L136.47 139.813C135.841 140.175 135.064 140.168 134.442 139.793Z" fill="#111111" stroke="#111111" stroke-width="5" stroke-linejoin="round"/><path d="M125.1 160.759V141.079C125.1 140.378 124.733 139.729 124.133 139.367L102.033 126.03C100.7 125.226 99 126.186 99 127.743V147.804C99 148.514 99.3762 149.171 99.9886 149.53L122.089 162.485C123.422 163.266 125.1 162.305 125.1 160.759Z" fill="#111111"/><path d="M146.7 160.759V141.079C146.7 140.378 147.067 139.729 147.667 139.367L169.767 126.03C171.1 125.226 172.8 126.186 172.8 127.743V147.804C172.8 148.514 172.424 149.171 171.811 149.53L149.711 162.485C148.378 163.266 146.7 162.305 146.7 160.759Z" fill="#111111"/><g clip-path="url(#fm-socket-L2)"><g class="fm-blink" style="transform-origin:112px 143.9px"><path d="M125.1 160.759V141.079C125.1 140.378 124.733 139.729 124.133 139.367L102.033 126.03C100.7 125.226 99 126.186 99 127.743V147.804C99 148.514 99.3762 149.171 99.9886 149.53L122.089 162.485C123.422 163.266 125.1 162.305 125.1 160.759Z" fill="#fff" transform="translate(112,143.9) scale(0.93) translate(-112,-143.9)"/></g></g><g clip-path="url(#fm-socket-R2)"><g class="fm-blink" style="transform-origin:159.75px 143.9px"><path d="M146.7 160.759V141.079C146.7 140.378 147.067 139.729 147.667 139.367L169.767 126.03C171.1 125.226 172.8 126.186 172.8 127.743V147.804C172.8 148.514 172.424 149.171 171.811 149.53L149.711 162.485C148.378 163.266 146.7 162.305 146.7 160.759Z" fill="#fff" transform="translate(159.75,143.9) scale(0.93) translate(-159.75,-143.9)"/></g></g></svg>
             </div>
-            <div class="brand-name">FORGE<span>CRM</span> <span style="font-size:9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(37, 211, 102, 0.12); color: #25D366; padding: 1.5px 5px; border-radius: 3px; border: 1px solid rgba(37, 211, 102, 0.22); vertical-align: middle; margin-left: 5px;">WhatsApp</span></div>
+            <div class="brand-name">FORGE<span>CHAT</span> <span style="font-size:9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(37, 211, 102, 0.12); color: #25D366; padding: 1.5px 5px; border-radius: 3px; border: 1px solid rgba(37, 211, 102, 0.22); vertical-align: middle; margin-left: 5px;">WhatsApp</span></div>
           </div>
-          <p>An open source self-hostable WhatsApp Business CRM engine for individuals, developers, and teams. Built by the community.</p>
+          <p>An open source self-hostable WhatsApp Business CHAT engine for individuals, developers, and teams. Built by the community.</p>
         </div>
 
         <div class="foot-cols">
@@ -6376,7 +6445,7 @@
     const events = [
       { user: "@sarthak", action: "pushed a commit", detail: '"fix: webhook retry logic"', time: "2m ago" },
       { user: "@meera", action: "opened an issue", detail: '"Add multi-agent routing"', time: "6m ago" },
-      { user: "@alex", action: "starred the repo", detail: "ForgeCRM is now at 1,248 stars", time: "8m ago" },
+      { user: "@alex", action: "starred the repo", detail: "ForgeCHAT is now at 1,248 stars", time: "8m ago" },
       { user: "@fatima", action: "joined Discord", detail: "Welcome to the guild!", time: "12m ago" },
       { user: "@developer", action: "merged PR #421", detail: '"Improve message queue"', time: "15m ago" },
       { user: "@karl", action: "pushed a commit", detail: '"feat: add rate limits"', time: "19m ago" },
@@ -7179,7 +7248,7 @@
       1: {
         cmd: "git clone https://github.com/Forgemind-git/ForgeCRM.git",
         lines: [
-          '<span class="c-comment">Cloning into \'ForgeCRM\'...</span>',
+          '<span class="c-comment">Cloning into \'ForgeCHAT\'...</span>',
           'remote: Enumerating objects: 1248, done.',
           'Receiving objects: 100% (1248/1248), 5.42 MiB | 12.4 MB/s',
           '<span class="c-success">✓ Cloned repository successfully.</span>'
@@ -7217,7 +7286,7 @@
           '<span class="c-comment">Booting local dev server...</span>',
           'Ready in 820ms.',
           'Listening: <span class="c-success">http://localhost:3000</span>',
-          '<span class="c-success">✓ ForgeCRM is live! 🎉</span>'
+          '<span class="c-success">✓ ForgeCHAT is live! 🎉</span>'
         ]
       }
     };
@@ -7557,14 +7626,12 @@
 
       document.addEventListener('mousemove', e => {
         mx = e.clientX; my = e.clientY;
-        dot.style.left = mx + 'px';
-        dot.style.top  = my + 'px';
+        dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
       });
       (function trackRing() {
         rx += (mx - rx) * 0.1;
         ry += (my - ry) * 0.1;
-        ring.style.left = rx + 'px';
-        ring.style.top  = ry + 'px';
+        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
         requestAnimationFrame(trackRing);
       })();
 
