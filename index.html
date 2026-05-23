@@ -7639,6 +7639,7 @@
 
       const SPEED = 0.6; // px per frame
       let isDragging = false;
+      let isHovering = false;
       let startX = 0;
       let startScroll = 0;
       let momentum = 0;
@@ -7648,13 +7649,17 @@
       function getHalf() { return track.scrollWidth / 2; }
 
       function loop() {
-        if (!isDragging) {
+        if (!isDragging && !isHovering) {
           wrap.scrollLeft += SPEED;
           if (wrap.scrollLeft >= getHalf()) wrap.scrollLeft -= getHalf();
         }
         rafId = requestAnimationFrame(loop);
       }
       rafId = requestAnimationFrame(loop);
+
+      // ── Hover pause ──
+      wrap.addEventListener('mouseenter', () => { isHovering = true; });
+      wrap.addEventListener('mouseleave', () => { isHovering = false; });
 
       // ── Mouse drag ──
       wrap.addEventListener('mousedown', e => {
