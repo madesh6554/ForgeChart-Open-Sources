@@ -749,6 +749,15 @@
     .ham.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
     /* Mobile Menu Drawer */
+    .drawer-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
     .mobile-drawer {
       position: fixed;
       top: 0;
@@ -758,13 +767,33 @@
       background: var(--dark);
       border-left: 1px solid var(--glass-border);
       z-index: 101;
-      padding: 80px 24px 40px;
+      padding: 72px 24px 40px;
       display: flex;
       flex-direction: column;
       gap: 2rem;
       transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .mobile-drawer.open { right: 0; }
+    /* close ‹ button */
+    .drawer-close {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-dim);
+      transition: background 0.15s, color 0.15s;
+    }
+    .drawer-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    html[data-theme="light"] .drawer-close { background: rgba(0,0,0,0.05); color: #555; }
+    html[data-theme="light"] .drawer-close:hover { background: rgba(0,0,0,0.1); color: #000; }
     .mobile-links { display: flex; flex-direction: column; gap: 1.25rem; list-style: none; }
     .mobile-links a { font-size: 16px; font-weight: 500; color: var(--text-dim); }
     .mobile-links a:hover { color: #fff; }
@@ -4657,8 +4686,14 @@
     </div>
   </header>
 
+  <!-- Click-outside overlay -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleMenu()"></div>
+
   <!-- Mobile navigation drawer -->
   <div class="mobile-drawer" id="mobileDrawer">
+    <button class="drawer-close" onclick="toggleMenu()" aria-label="Close menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
     <ul class="mobile-links">
       <li><a href="#features" onclick="toggleMenu()">Features</a></li>
       <li><a href="#modules" onclick="toggleMenu()">Modules</a></li>
@@ -5930,19 +5965,360 @@
       renderLogs();
     }, 4500);
 
-    // ─── POPULAR MODULES CATEGORIES FILTER ───
-    function filterModules(category) {
-      const cards = document.querySelectorAll('.mod-card');
-      cards.forEach(card => {
-        if (category === 'all' || card.dataset.cat === category) {
-          card.style.display = 'block';
-          setTimeout(() => card.style.opacity = '1', 50);
-        } else {
-          card.style.opacity = '0';
-          setTimeout(() => card.style.display = 'none', 200);
+    // ─── NEW n8n-STYLE WORKFLOW INTERACTION ENGINE ───
+    const workflowSchemas = {
+      "home-dashboard": {
+        nodes: [
+          { id: 1, type: "webhook", title: "Cron Trigger", desc: "Daily at 08:00", cat: "webhook", icon: "clock", x: 25, y: 190 },
+          { id: 2, type: "core", title: "Fetch Stats", desc: "API sent logs", cat: "core", icon: "database", x: 190, y: 190 },
+          { id: 3, type: "core", title: "Aggregate KPI", desc: "Compute metrics", cat: "core", icon: "processor", x: 355, y: 190 },
+          { id: 4, type: "core", title: "Update Widgets", desc: "Active elements", cat: "core", icon: "layout", x: 520, y: 190 }
+        ],
+        connections: [
+          { from: 1, to: 2 },
+          { from: 2, to: 3 },
+          { from: 3, to: 4 }
+        ]
+      },
+      "chats-inbox": {
+        nodes: [
+          { id: 1, type: "webhook", title: "Msg Inbound", desc: "Webhook trigger", cat: "webhook", icon: "zap", x: 25, y: 190 },
+          { id: 2, type: "core", title: "Chats Inbox", desc: "Load active log", cat: "core", icon: "message-square", x: 190, y: 190 },
+          { id: 3, type: "auto", title: "Business Hours", desc: "Check timeline", cat: "auto", icon: "calendar", x: 355, y: 100 },
+          { id: 4, type: "core", title: "Assign Agent", desc: "Round-robin BDA", cat: "core", icon: "user-check", x: 520, y: 100 },
+          { id: 5, type: "auto", title: "Out-of-Hours", desc: "Send auto-ack", cat: "auto", icon: "clock", x: 355, y: 280 },
+          { id: 6, type: "core", title: "Inbox Archive", desc: "Mark pending", cat: "core", icon: "archive", x: 520, y: 280 }
+        ],
+        connections: [
+          { from: 1, to: 2 },
+          { from: 2, to: 3 },
+          { from: 3, to: 4 },
+          { from: 2, to: 5 },
+          { from: 5, to: 6 }
+        ]
+      },
+      "flow-builder": {
+        nodes: [
+          { id: 1, type: "webhook", title: "Incoming Msg", desc: "Webhook trigger", cat: "webhook", icon: "message-circle", x: 25, y: 190 },
+          { id: 2, type: "auto", title: "Flow Builder", desc: "Parse trigger", cat: "auto", icon: "git-branch", x: 190, y: 190 },
+          { id: 3, type: "auto", title: "Condition Node", desc: "Check keywords", cat: "auto", icon: "sliders", x: 355, y: 100 },
+          { id: 4, type: "core", title: "Chats Inbox", desc: "Transfer agent", cat: "core", icon: "message-square", x: 355, y: 280 },
+          { id: 5, type: "broadcast", title: "Send Template", desc: "Approved Meta flow", cat: "broadcast", icon: "send", x: 520, y: 100 },
+          { id: 6, type: "core", title: "Resolve Flow", desc: "Mark completed", cat: "core", icon: "user-check", x: 520, y: 280 }
+        ],
+        connections: [
+          { from: 1, to: 2 },
+          { from: 2, to: 3 },
+          { from: 2, to: 4 },
+          { from: 3, to: 5 },
+          { from: 4, to: 6 }
+        ]
+      },
+      "ai-smart-replies": {
+        nodes: [
+          { id: 1, type: "webhook", title: "User Msg In", desc: "Meta Cloud API", cat: "webhook", icon: "zap", x: 25, y: 190 },
+          { id: 2, type: "auto", title: "LLM OpenAI Node", desc: "Intent classifier", cat: "auto", icon: "cpu", x: 190, y: 190 },
+          { id: 3, type: "auto", title: "Knowledge Retrieve", desc: "Vector DB query", cat: "auto", icon: "search", x: 355, y: 190 },
+          { id: 4, type: "core", title: "Agent Suggest", desc: "Approval draft", cat: "core", icon: "users", x: 520, y: 190 }
+        ],
+        connections: [
+          { from: 1, to: 2 },
+          { from: 2, to: 3 },
+          { from: 3, to: 4 }
+        ]
+      },
+      "broadcast-blast": {
+        nodes: [
+          { id: 1, type: "broadcast", title: "Blast Trigger", desc: "Manual / Segment", cat: "broadcast", icon: "play", x: 25, y: 190 },
+          { id: 2, type: "core", title: "Sync Templates", desc: "Meta API fetch", cat: "core", icon: "refresh-cw", x: 190, y: 190 },
+          { id: 3, type: "auto", title: "Rate Limiter", desc: "API queue cap", cat: "auto", icon: "sliders", x: 355, y: 190 },
+          { id: 4, type: "analytics", title: "Delivery Log", desc: "Update counters", cat: "analytics", icon: "file-text", x: 520, y: 190 }
+        ],
+        connections: [
+          { from: 1, to: 2 },
+          { from: 2, to: 3 },
+          { from: 3, to: 4 }
+        ]
+      },
+      "metric-insights": {
+        nodes: [
+          { id: 1, type: "webhook", title: "Daily Trigger", desc: "Scheduled 00:00", cat: "webhook", icon: "calendar", x: 25, y: 190 },
+          { id: 2, type: "analytics", title: "Query Metrics", desc: "Aggregate logs", cat: "analytics", icon: "database", x: 190, y: 190 },
+          { id: 3, type: "analytics", title: "Render Spark", desc: "Generate SVG", cat: "analytics", icon: "activity", x: 355, y: 190 },
+          { id: 4, type: "core", title: "Email Report", desc: "Send to admin", cat: "core", icon: "mail", x: 520, y: 190 }
+        ],
+        connections: [
+          { from: 1, to: 2 },
+          { from: 2, to: 3 },
+          { from: 3, to: 4 }
+        ]
+      }
+    };
+
+    let currentActiveModule = "home-dashboard";
+    let canvasZoom = 1;
+    let canvasLocked = false;
+    let isRunningSim = false;
+
+    function getNodeIcon(icon) {
+      switch (icon) {
+        case "clock":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+        case "database":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>`;
+        case "processor":
+        case "cpu":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>`;
+        case "layout":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>`;
+        case "zap":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
+        case "message-square":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+        case "calendar":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
+        case "user-check":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>`;
+        case "archive":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>`;
+        case "message-circle":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>`;
+        case "git-branch":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>`;
+        case "send":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`;
+        case "bar-chart":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`;
+        case "search":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+        case "users":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
+        case "play":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+        case "refresh-cw":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
+        case "sliders":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>`;
+        case "file-text":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
+        case "activity":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`;
+        case "mail":
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`;
+        default:
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg>`;
+      }
+    }
+
+    function renderWorkflow(moduleKey) {
+      const area = document.getElementById("canvasWorkflowArea");
+      if (!area) return;
+
+      const schema = workflowSchemas[moduleKey];
+      if (!schema) return;
+
+      let html = `<div class="canvas-nodes" style="transform: scale(${canvasZoom}); transform-origin: center center; transition: transform 0.2s;">`;
+      
+      // Render Nodes
+      schema.nodes.forEach(node => {
+        const iconColorClass = node.cat === 'core' ? 'green' : (node.cat === 'auto' ? 'red' : (node.cat === 'broadcast' ? 'yellow' : 'purple'));
+        html += `
+          <div class="canvas-node node-${node.cat} tilt-card" data-node-id="${node.id}" style="left: ${node.x}px; top: ${node.y}px;">
+            <div class="node-port port-in"></div>
+            <div class="node-icon-box ${iconColorClass}">
+              ${getNodeIcon(node.icon)}
+            </div>
+            <div class="node-details">
+              <span class="node-title">${node.title}</span>
+              <span class="node-desc">${node.desc}</span>
+            </div>
+            <div class="node-port port-out"></div>
+            <div class="node-indicator">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 7px; height: 7px;"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+
+      // Render SVG connections
+      html += `<svg class="canvas-svg" style="transform: scale(${canvasZoom}); transform-origin: center center; transition: transform 0.2s;">`;
+      schema.connections.forEach(conn => {
+        const fromNode = schema.nodes.find(n => n.id === conn.from);
+        const toNode = schema.nodes.find(n => n.id === conn.to);
+        if (fromNode && toNode) {
+          const startX = fromNode.x + 145;
+          const startY = fromNode.y + 26;
+          const endX = toNode.x;
+          const endY = toNode.y + 26;
+          const dx = Math.abs(endX - startX) * 0.5;
+          const dPath = `M ${startX} ${startY} C ${startX + dx} ${startY}, ${endX - dx} ${endY}, ${endX} ${endY}`;
+          html += `<path class="connector-path" d="${dPath}" data-connection-from="${conn.from}" data-connection-to="${conn.to}"></path>`;
+        }
+      });
+      html += `</svg>`;
+
+      area.innerHTML = html;
+
+      // Reactivate tilt logic for canvas nodes
+      area.querySelectorAll('.tilt-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          if (canvasLocked) return;
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          const angleX = (yc - y) / 8;
+          const angleY = (x - xc) / 8;
+          card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.03)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+      });
+    }
+
+    function selectModuleCard(moduleKey) {
+      currentActiveModule = moduleKey;
+      
+      // Update selected class in gallery cards
+      document.querySelectorAll(".gallery-card").forEach(c => {
+        c.classList.remove("selected");
+        if (c.dataset.module === moduleKey) {
+          c.classList.add("selected");
         }
       });
 
+      renderWorkflow(moduleKey);
+    }
+
+    // Zoom Actions
+    function adjustZoom(amount) {
+      if (canvasLocked) return;
+      canvasZoom = Math.min(Math.max(0.7, canvasZoom + amount), 1.3);
+      document.getElementById("zoomValText").textContent = Math.round(canvasZoom * 100) + "%";
+      renderWorkflow(currentActiveModule);
+    }
+
+    function resetZoom() {
+      if (canvasLocked) return;
+      canvasZoom = 1;
+      document.getElementById("zoomValText").textContent = "100%";
+      renderWorkflow(currentActiveModule);
+    }
+
+    function toggleCanvasLock() {
+      canvasLocked = !canvasLocked;
+      const btn = document.getElementById("btnLockCanvas");
+      const icon = document.getElementById("lockIcon");
+      if (canvasLocked) {
+        btn.classList.add("locked");
+        btn.style.background = "var(--red-dim)";
+        btn.style.borderColor = "var(--red-hi)";
+        btn.style.color = "var(--red-hi)";
+        // Locked SVG (Closed padlock)
+        icon.innerHTML = `<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`;
+      } else {
+        btn.classList.remove("locked");
+        btn.style.background = "";
+        btn.style.borderColor = "";
+        btn.style.color = "";
+        // Unlocked SVG (Open padlock)
+        icon.innerHTML = `<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>`;
+      }
+    }
+
+    // Workflow Simulation Playback
+    function runWorkflowSimulation() {
+      if (isRunningSim) return;
+      isRunningSim = true;
+      const btn = document.getElementById('btnRunWorkflow');
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+      
+      const currentSchema = workflowSchemas[currentActiveModule];
+      if (!currentSchema) {
+        isRunningSim = false;
+        btn.disabled = false;
+        btn.style.opacity = '';
+        return;
+      }
+      
+      // Reset all connections and nodes animations
+      document.querySelectorAll('.connector-path').forEach(p => p.classList.remove('active-flow'));
+      document.querySelectorAll('.canvas-node').forEach(n => n.classList.remove('pulse-node'));
+      
+      // Sort nodes by X coordinate to simulate data flow sequence
+      const sortedNodes = [...currentSchema.nodes].sort((a, b) => a.x - b.x);
+      
+      let index = 0;
+      function animateNextNode() {
+        if (index < sortedNodes.length) {
+          const node = sortedNodes[index];
+          const nodeEl = document.querySelector(`[data-node-id="${node.id}"]`);
+          if (nodeEl) {
+            nodeEl.classList.add('pulse-node');
+            setTimeout(() => nodeEl.classList.remove('pulse-node'), 600);
+          }
+          
+          // Find outgoing connections from this node to animate paths
+          const outgoing = currentSchema.connections.filter(c => c.from === node.id);
+          outgoing.forEach(c => {
+            const pathEl = document.querySelector(`[data-connection-from="${c.from}"][data-connection-to="${c.to}"]`);
+            if (pathEl) {
+              pathEl.classList.add('active-flow');
+            }
+          });
+          
+          index++;
+          setTimeout(animateNextNode, 500);
+        } else {
+          // Finished simulation
+          setTimeout(() => {
+            document.querySelectorAll('.connector-path').forEach(p => p.classList.remove('active-flow'));
+            btn.disabled = false;
+            btn.style.opacity = '';
+            isRunningSim = false;
+          }, 1500);
+        }
+      }
+      
+      animateNextNode();
+    }
+
+    // Gallery Card Filtering & Searching
+    function handleGallerySearch() {
+      const searchVal = document.getElementById("gallerySearchInput").value.toLowerCase();
+      const catVal = document.getElementById("galleryCategorySelect").value;
+      filterGalleryCards(catVal, searchVal);
+    }
+
+    function handleGalleryFilterDropdown() {
+      const catVal = document.getElementById("galleryCategorySelect").value;
+      const searchVal = document.getElementById("gallerySearchInput").value.toLowerCase();
+      
+      // Sync with top category tabs
+      const tabs = document.querySelectorAll('.mod-tab');
+      tabs.forEach(tab => {
+        if (tab.textContent.toLowerCase().includes(catVal) || (catVal === 'all' && tab.textContent.includes('All'))) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+
+      filterGalleryCards(catVal, searchVal);
+    }
+
+    function filterModules(category) {
+      // Sync with search select dropdown
+      const select = document.getElementById("galleryCategorySelect");
+      if (select) select.value = category;
+
+      const searchVal = document.getElementById("gallerySearchInput").value.toLowerCase();
+
+      // Highlight active tab
       const tabs = document.querySelectorAll('.mod-tab');
       tabs.forEach(tab => {
         if (tab.textContent.toLowerCase().includes(category) || (category === 'all' && tab.textContent.includes('All'))) {
@@ -5951,6 +6327,35 @@
           tab.classList.remove('active');
         }
       });
+
+      filterGalleryCards(category, searchVal);
+    }
+
+    function filterGalleryCards(category, searchTxt) {
+      const cards = document.querySelectorAll('.gallery-card');
+      let visibleCards = [];
+
+      cards.forEach(card => {
+        const title = card.querySelector('.gallery-card-title').textContent.toLowerCase();
+        const desc = card.querySelector('.gallery-card-desc').textContent.toLowerCase();
+        const isCatMatch = (category === 'all' || card.dataset.cat === category);
+        const isSearchMatch = (!searchTxt || title.includes(searchTxt) || desc.includes(searchTxt));
+
+        if (isCatMatch && isSearchMatch) {
+          card.style.display = 'flex';
+          setTimeout(() => card.style.opacity = '1', 50);
+          visibleCards.push(card);
+        } else {
+          card.style.opacity = '0';
+          card.style.display = 'none';
+        }
+      });
+
+      // If currently active module card is hidden, select the first visible one
+      const activeVisible = visibleCards.find(c => c.dataset.module === currentActiveModule);
+      if (!activeVisible && visibleCards.length > 0) {
+        selectModuleCard(visibleCards[0].dataset.module);
+      }
     }
 
     // ─── 3D TILT EFFECT ON CARDS ───
@@ -6260,12 +6665,14 @@
     // ─── MOBILE DRAWER TOGGLE ───
     const hamBtn = document.getElementById('hamBtn');
     const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
 
     hamBtn.addEventListener('click', toggleMenu);
 
     function toggleMenu() {
       hamBtn.classList.toggle('open');
       mobileDrawer.classList.toggle('open');
+      drawerOverlay.classList.toggle('open');
     }
 
     // ─── THEME TOGGLE ───
