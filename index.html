@@ -1553,27 +1553,60 @@
     .mod-tabs {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 24px;
       margin-bottom: 2rem;
       border-bottom: 1px solid var(--glass-border);
-      padding-bottom: 12px;
+      padding-bottom: 14px;
+    }
+    html[data-theme="light"] .mod-tabs {
+      border-bottom-color: rgba(0, 0, 0, 0.08);
     }
     .mod-tab {
-      padding: 8px 16px;
-      border-radius: 8px;
+      position: relative;
+      padding: 4px 0 14px 0;
       font-family: var(--font-mono);
       font-size: 11.5px;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-dim);
-      border: 1px solid transparent;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: color 0.25s ease;
+      border: none;
+      background: transparent;
+      border-radius: 0;
     }
-    .mod-tab:hover { color: #fff; }
+    .mod-tab:hover {
+      color: var(--text);
+    }
+    html[data-theme="light"] .mod-tab:hover {
+      color: var(--text);
+    }
+    .mod-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      background: var(--red-hi);
+      transform: scaleX(0);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: left;
+      border-radius: 2px;
+    }
+    html[data-theme="light"] .mod-tab::after {
+      background: var(--red);
+    }
+    .mod-tab:hover::after,
+    .mod-tab.active::after {
+      transform: scaleX(1);
+    }
     .mod-tab.active {
       color: var(--red-hi);
-      background: var(--red-dim);
-      border-color: rgba(229, 9, 20, 0.25);
+      background: transparent;
+      border-color: transparent;
+    }
+    html[data-theme="light"] .mod-tab.active {
+      color: var(--red);
     }
     /* ─── NEW WORKFLOW BENTO LAYOUT (n8n-STYLE) ─── */
     .modules-bento-layout {
@@ -1592,7 +1625,8 @@
       background: rgba(12, 12, 13, 0.55);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      height: 520px;
+      height: 660px;
+      max-height: 660px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -1991,6 +2025,8 @@
       border-radius: 16px;
       padding: 22px;
       box-shadow: var(--glass-glow);
+      height: 660px;
+      max-height: 660px;
     }
     html[data-theme="light"] .module-gallery-wrapper {
       background: rgba(255, 255, 255, 0.55);
@@ -2074,8 +2110,25 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      flex: 1;
       margin-bottom: 16px;
+      overflow-y: auto;
+      height: 314px; /* shows exactly 2 rows of cards */
+      padding-right: 4px;
+    }
+    
+    /* Custom premium scrollbar for gallery cards grid */
+    .gallery-cards-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+    .gallery-cards-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .gallery-cards-grid::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+    html[data-theme="light"] .gallery-cards-grid::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.08);
     }
     .gallery-card {
       background: rgba(12, 12, 13, 0.6);
@@ -2167,6 +2220,7 @@
       gap: 10px;
       border-top: 1px solid var(--glass-border);
       padding-top: 14px;
+      margin-top: auto; /* push features to the bottom of the gallery wrapper */
     }
     html[data-theme="light"] .gallery-bottom-features {
       border-color: rgba(0, 0, 0, 0.08);
@@ -2448,6 +2502,32 @@
     }
     html[data-theme="light"] .drawer-save-btn {
       background: var(--red);
+    }
+
+    /* Responsive bento grid overrides */
+    @media (max-width: 991px) {
+      .modules-bento-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .module-gallery-wrapper {
+        height: auto !important;
+        max-height: none !important;
+      }
+      .workflow-canvas-container {
+        height: auto !important;
+        max-height: none !important;
+      }
+      .gallery-cards-grid {
+        overflow-y: visible !important;
+        height: auto !important;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .gallery-cards-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
 
