@@ -2107,46 +2107,53 @@
       color: var(--text);
     }
     
+    /* GALLERY SCROLL CONTAINER */
+    .gallery-scroll-container {
+      overflow-y: visible; /* Dynamic by default */
+      height: auto;
+      margin-bottom: 16px;
+      scrollbar-width: thin; /* Firefox scrollbar constraint */
+      scrollbar-color: rgba(229, 9, 20, 0.45) rgba(255, 255, 255, 0.03); /* Firefox thumb track colors */
+    }
+    .module-gallery-wrapper.gallery-fixed-height .gallery-scroll-container {
+      height: 260px; /* Constrain height to force scroll */
+      overflow-y: auto;
+      min-height: 0;
+      padding-right: 4px;
+    }
+    
     /* GALLERY CARDS GRID (2 COLUMNS) */
     .gallery-cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 16px;
-      overflow-y: visible; /* Dynamic by default */
-      height: auto;
       align-content: start; /* Prevent cards from stretching vertically */
     }
-    .module-gallery-wrapper.gallery-fixed-height .gallery-cards-grid {
-      height: 260px; /* Guarantee height constraint for scrollbar activation */
-      overflow-y: auto; /* Constrained scrolling only inside fixed-height wrapper */
-      padding-right: 4px;
-    }
     
-    /* Custom premium scrollbar for gallery cards grid */
-    .gallery-cards-grid::-webkit-scrollbar {
+    /* Custom premium scrollbar for gallery scroll container */
+    .gallery-scroll-container::-webkit-scrollbar {
       width: 6px;
     }
-    .gallery-cards-grid::-webkit-scrollbar-track {
+    .gallery-scroll-container::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.03);
       border-radius: 3px;
       border: 1px solid rgba(255, 255, 255, 0.05); /* Visible scrollbar track line */
     }
-    .gallery-cards-grid::-webkit-scrollbar-thumb {
-      background: rgba(229, 9, 20, 0.4); /* Visible red accent thumb */
+    .gallery-scroll-container::-webkit-scrollbar-thumb {
+      background: rgba(229, 9, 20, 0.45); /* Visible red accent thumb */
       border-radius: 3px;
     }
-    .gallery-cards-grid::-webkit-scrollbar-thumb:hover {
+    .gallery-scroll-container::-webkit-scrollbar-thumb:hover {
       background: rgba(229, 9, 20, 0.7);
     }
-    html[data-theme="light"] .gallery-cards-grid::-webkit-scrollbar-track {
+    html[data-theme="light"] .gallery-scroll-container::-webkit-scrollbar-track {
       background: rgba(0, 0, 0, 0.03);
       border-color: rgba(0, 0, 0, 0.05);
     }
-    html[data-theme="light"] .gallery-cards-grid::-webkit-scrollbar-thumb {
+    html[data-theme="light"] .gallery-scroll-container::-webkit-scrollbar-thumb {
       background: rgba(229, 9, 20, 0.3);
     }
-    html[data-theme="light"] .gallery-cards-grid::-webkit-scrollbar-thumb:hover {
+    html[data-theme="light"] .gallery-scroll-container::-webkit-scrollbar-thumb:hover {
       background: rgba(229, 9, 20, 0.6);
     }
     .gallery-card {
@@ -2538,10 +2545,12 @@
         height: auto !important;
         max-height: none !important;
       }
-      .gallery-cards-grid,
-      .module-gallery-wrapper.gallery-fixed-height .gallery-cards-grid {
+      .gallery-scroll-container,
+      .module-gallery-wrapper.gallery-fixed-height .gallery-scroll-container {
         overflow-y: visible !important;
         height: auto !important; /* Override desktop height constraints */
+      }
+      .gallery-cards-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
@@ -5744,87 +5753,90 @@
             </select>
           </div>
 
-          <!-- 6 Module Cards Stacked/Grid -->
-          <div class="gallery-cards-grid" id="galleryCardsGrid">
-            
-            <!-- Home Dashboard -->
-            <div class="gallery-card tilt-card selected" data-cat="core" data-module="home-dashboard" onclick="selectModuleCard('home-dashboard')">
-              <div class="gallery-card-header">
-                <span class="gallery-card-badge core">Core</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <!-- Scrollable container wrapper -->
+          <div class="gallery-scroll-container">
+            <!-- 6 Module Cards Stacked/Grid -->
+            <div class="gallery-cards-grid" id="galleryCardsGrid">
+              
+              <!-- Home Dashboard -->
+              <div class="gallery-card tilt-card selected" data-cat="core" data-module="home-dashboard" onclick="selectModuleCard('home-dashboard')">
+                <div class="gallery-card-header">
+                  <span class="gallery-card-badge core">Core</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                </div>
+                <div class="gallery-card-body">
+                  <h4 class="gallery-card-title">Home Dashboard</h4>
+                  <p class="gallery-card-desc">Visual KPI metrics tiles, automated lead funnel flow charts, and messaging volume trend lines.</p>
+                </div>
+                <div class="gallery-card-footer">Single User Scope Limit</div>
               </div>
-              <div class="gallery-card-body">
-                <h4 class="gallery-card-title">Home Dashboard</h4>
-                <p class="gallery-card-desc">Visual KPI metrics tiles, automated lead funnel flow charts, and messaging volume trend lines.</p>
-              </div>
-              <div class="gallery-card-footer">Single User Scope Limit</div>
-            </div>
 
-            <!-- Chats Inbox -->
-            <div class="gallery-card tilt-card" data-cat="core" data-module="chats-inbox" onclick="selectModuleCard('chats-inbox')">
-              <div class="gallery-card-header">
-                <span class="gallery-card-badge core">Core</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <!-- Chats Inbox -->
+              <div class="gallery-card tilt-card" data-cat="core" data-module="chats-inbox" onclick="selectModuleCard('chats-inbox')">
+                <div class="gallery-card-header">
+                  <span class="gallery-card-badge core">Core</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="gallery-card-body">
+                  <h4 class="gallery-card-title">Chats Inbox</h4>
+                  <p class="gallery-card-desc">Interactive live messaging with support for rich images, videos, PDF documents, and template syncs.</p>
+                </div>
+                <div class="gallery-card-footer">Polling Fetch • No Reactions</div>
               </div>
-              <div class="gallery-card-body">
-                <h4 class="gallery-card-title">Chats Inbox</h4>
-                <p class="gallery-card-desc">Interactive live messaging with support for rich images, videos, PDF documents, and template syncs.</p>
-              </div>
-              <div class="gallery-card-footer">Polling Fetch • No Reactions</div>
-            </div>
 
-            <!-- Flow Builder -->
-            <div class="gallery-card tilt-card" data-cat="auto" data-module="flow-builder" onclick="selectModuleCard('flow-builder')">
-              <div class="gallery-card-header">
-                <span class="gallery-card-badge auto">Automation</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <!-- Flow Builder -->
+              <div class="gallery-card tilt-card" data-cat="auto" data-module="flow-builder" onclick="selectModuleCard('flow-builder')">
+                <div class="gallery-card-header">
+                  <span class="gallery-card-badge auto">Automation</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="gallery-card-body">
+                  <h4 class="gallery-card-title">Flow Builder</h4>
+                  <p class="gallery-card-desc">Keyword trigger mapping. Create conditional response templates and route leads instantly.</p>
+                </div>
+                <div class="gallery-card-footer">2 Core Linear Nodes Limit</div>
               </div>
-              <div class="gallery-card-body">
-                <h4 class="gallery-card-title">Flow Builder</h4>
-                <p class="gallery-card-desc">Keyword trigger mapping. Create conditional response templates and route leads instantly.</p>
-              </div>
-              <div class="gallery-card-footer">2 Core Linear Nodes Limit</div>
-            </div>
 
-            <!-- AI Smart Replies -->
-            <div class="gallery-card tilt-card" data-cat="auto" data-module="ai-smart-replies" onclick="selectModuleCard('ai-smart-replies')">
-              <div class="gallery-card-header">
-                <span class="gallery-card-badge auto">Automation</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+              <!-- AI Smart Replies -->
+              <div class="gallery-card tilt-card" data-cat="auto" data-module="ai-smart-replies" onclick="selectModuleCard('ai-smart-replies')">
+                <div class="gallery-card-header">
+                  <span class="gallery-card-badge auto">Automation</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+                </div>
+                <div class="gallery-card-body">
+                  <h4 class="gallery-card-title">AI Smart Replies</h4>
+                  <p class="gallery-card-desc">Integrate LLM tokens to suggest quick context-specific support answers to human agents.</p>
+                </div>
+                <div class="gallery-card-footer">Pro Add-On Feature</div>
               </div>
-              <div class="gallery-card-body">
-                <h4 class="gallery-card-title">AI Smart Replies</h4>
-                <p class="gallery-card-desc">Integrate LLM tokens to suggest quick context-specific support answers to human agents.</p>
-              </div>
-              <div class="gallery-card-footer">Pro Add-On Feature</div>
-            </div>
 
-            <!-- Broadcast Blast -->
-            <div class="gallery-card tilt-card" data-cat="broadcast" data-module="broadcast-blast" onclick="selectModuleCard('broadcast-blast')">
-              <div class="gallery-card-header">
-                <span class="gallery-card-badge broadcast">Campaigns</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <!-- Broadcast Blast -->
+              <div class="gallery-card tilt-card" data-cat="broadcast" data-module="broadcast-blast" onclick="selectModuleCard('broadcast-blast')">
+                <div class="gallery-card-header">
+                  <span class="gallery-card-badge broadcast">Campaigns</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <div class="gallery-card-body">
+                  <h4 class="gallery-card-title">Broadcast Blast</h4>
+                  <p class="gallery-card-desc">Deliver thousands of approved template messages with custom audience tagging filters.</p>
+                </div>
+                <div class="gallery-card-footer">Standard Variable Sync</div>
               </div>
-              <div class="gallery-card-body">
-                <h4 class="gallery-card-title">Broadcast Blast</h4>
-                <p class="gallery-card-desc">Deliver thousands of approved template messages with custom audience tagging filters.</p>
-              </div>
-              <div class="gallery-card-footer">Standard Variable Sync</div>
-            </div>
 
-            <!-- Metric Insights -->
-            <div class="gallery-card tilt-card" data-cat="analytics" data-module="metric-insights" onclick="selectModuleCard('metric-insights')">
-              <div class="gallery-card-header">
-                <span class="gallery-card-badge analytics">Insights</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <!-- Metric Insights -->
+              <div class="gallery-card tilt-card" data-cat="analytics" data-module="metric-insights" onclick="selectModuleCard('metric-insights')">
+                <div class="gallery-card-header">
+                  <span class="gallery-card-badge analytics">Insights</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <div class="gallery-card-body">
+                  <h4 class="gallery-card-title">Metric Insights</h4>
+                  <p class="gallery-card-desc">Visualize delivery ratios, active template popularity stats, and user conversion curves.</p>
+                </div>
+                <div class="gallery-card-footer">30-day History limit</div>
               </div>
-              <div class="gallery-card-body">
-                <h4 class="gallery-card-title">Metric Insights</h4>
-                <p class="gallery-card-desc">Visualize delivery ratios, active template popularity stats, and user conversion curves.</p>
-              </div>
-              <div class="gallery-card-footer">30-day History limit</div>
-            </div>
 
+            </div>
           </div>
 
           <div class="gallery-bottom-features">
@@ -7371,6 +7383,7 @@
 
       // Initialize workflow canvas dragging and load default workflow
       initNodeDragging();
+      filterModules('all'); // Initialize category filters and load layout classes
       selectModuleCard('home-dashboard');
 
       // Initial simulation start
