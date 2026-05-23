@@ -1625,8 +1625,8 @@
       background: rgba(12, 12, 13, 0.55);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      height: 660px;
-      max-height: 660px;
+      height: 520px;
+      max-height: 520px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -2025,8 +2025,9 @@
       border-radius: 16px;
       padding: 22px;
       box-shadow: var(--glass-glow);
-      height: 660px;
-      max-height: 660px;
+      height: 520px; /* match Left Column Canvas height */
+      max-height: 520px;
+      transition: height 0.3s ease, max-height 0.3s ease;
     }
     html[data-theme="light"] .module-gallery-wrapper {
       background: rgba(255, 255, 255, 0.55);
@@ -2111,8 +2112,14 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-bottom: 16px;
-      overflow-y: auto;
-      height: 314px; /* shows exactly 2 rows of cards */
+      overflow-y: visible; /* Dynamic by default */
+      height: auto;
+      align-content: start; /* Prevent cards from stretching vertically */
+    }
+    .module-gallery-wrapper.gallery-fixed-height .gallery-cards-grid {
+      flex: 1;
+      overflow-y: auto; /* Constrained scrolling only inside fixed-height wrapper */
+      min-height: 0;
       padding-right: 4px;
     }
     
@@ -2510,7 +2517,8 @@
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
-      .module-gallery-wrapper {
+      .module-gallery-wrapper,
+      .module-gallery-wrapper.gallery-fixed-height {
         height: auto !important;
         max-height: none !important;
       }
@@ -2518,9 +2526,9 @@
         height: auto !important;
         max-height: none !important;
       }
-      .gallery-cards-grid {
+      .gallery-cards-grid,
+      .module-gallery-wrapper.gallery-fixed-height .gallery-cards-grid {
         overflow-y: visible !important;
-        height: auto !important;
         grid-template-columns: 1fr 1fr;
       }
     }
@@ -5703,7 +5711,7 @@
         </div>
 
         <!-- Right Column: Module Gallery -->
-        <div class="module-gallery-wrapper">
+        <div class="module-gallery-wrapper gallery-fixed-height">
           <div class="gallery-info-header">
             <h3 class="gallery-title">Module Gallery</h3>
             <p class="gallery-desc">Click a module card below to preview its live workflow configuration on the canvas.</p>
@@ -7051,6 +7059,16 @@
     function filterGalleryCards(category, searchTxt) {
       const cards = document.querySelectorAll('.gallery-card');
       let visibleCards = [];
+
+      // Enable fixed height scrolling ONLY when All Category is selected
+      const galleryWrapper = document.querySelector('.module-gallery-wrapper');
+      if (galleryWrapper) {
+        if (category === 'all') {
+          galleryWrapper.classList.add('gallery-fixed-height');
+        } else {
+          galleryWrapper.classList.remove('gallery-fixed-height');
+        }
+      }
 
       cards.forEach(card => {
         const title = card.querySelector('.gallery-card-title').textContent.toLowerCase();
