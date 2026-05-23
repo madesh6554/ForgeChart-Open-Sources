@@ -2978,22 +2978,23 @@
 
     /* ─── ROADMAP MARQUEE ─── */
     .road-marquee-wrap {
-      overflow: hidden;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
       margin-top: 3rem;
       position: relative;
+      cursor: grab;
       -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
       mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
     }
+    .road-marquee-wrap::-webkit-scrollbar { display: none; }
+    .road-marquee-wrap.is-dragging { cursor: grabbing; }
     .road-marquee-track {
       display: flex;
       gap: 14px;
       width: max-content;
-      animation: roadScroll 38s linear infinite;
-    }
-    .road-marquee-track:hover { animation-play-state: paused; }
-    @keyframes roadScroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+      padding-bottom: 4px;
     }
     .road-card {
       background: var(--glass-bg);
@@ -3003,6 +3004,7 @@
       width: 270px;
       flex-shrink: 0;
       transition: border-color 0.3s, transform 0.3s;
+      user-select: none;
     }
     .road-card:hover {
       border-color: rgba(255,255,255,0.12);
@@ -7628,6 +7630,74 @@
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // ─── ROADMAP MARQUEE: auto-scroll + drag/touch ───
+    (function() {
+      const wrap  = document.querySelector('.road-marquee-wrap');
+      const track = document.querySelector('.road-marquee-track');
+      if (!wrap || !track) return;
+
+      const SPEED = 0.6; // px per frame
+      let isDragging = false;
+      let startX = 0;
+      let startScroll = 0;
+      let momentum = 0;
+      let lastX = 0;
+      let rafId;
+
+      function getHalf() { return track.scrollWidth / 2; }
+
+      function loop() {
+        if (!isDragging) {
+          wrap.scrollLeft += SPEED;
+          if (wrap.scrollLeft >= getHalf()) wrap.scrollLeft -= getHalf();
+        }
+        rafId = requestAnimationFrame(loop);
+      }
+      rafId = requestAnimationFrame(loop);
+
+      // ── Mouse drag ──
+      wrap.addEventListener('mousedown', e => {
+        isDragging = true;
+        startX = e.pageX;
+        startScroll = wrap.scrollLeft;
+        momentum = 0;
+        lastX = e.pageX;
+        wrap.classList.add('is-dragging');
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        momentum = e.pageX - lastX;
+        lastX = e.pageX;
+        wrap.scrollLeft = startScroll - (e.pageX - startX);
+        if (wrap.scrollLeft < 0) wrap.scrollLeft += getHalf();
+        if (wrap.scrollLeft >= getHalf()) wrap.scrollLeft -= getHalf();
+      });
+      window.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        wrap.classList.remove('is-dragging');
+      });
+
+      // ── Touch drag ──
+      wrap.addEventListener('touchstart', e => {
+        isDragging = true;
+        startX = e.touches[0].pageX;
+        startScroll = wrap.scrollLeft;
+        lastX = startX;
+        momentum = 0;
+      }, { passive: true });
+      wrap.addEventListener('touchmove', e => {
+        if (!isDragging) return;
+        momentum = e.touches[0].pageX - lastX;
+        lastX = e.touches[0].pageX;
+        wrap.scrollLeft = startScroll - (e.touches[0].pageX - startX);
+        if (wrap.scrollLeft < 0) wrap.scrollLeft += getHalf();
+        if (wrap.scrollLeft >= getHalf()) wrap.scrollLeft -= getHalf();
+      }, { passive: true });
+      wrap.addEventListener('touchend', () => { isDragging = false; });
+    })();
 
     // ─── SCROLL REVEAL INTERACTION ───
     const scrollObserver = new IntersectionObserver(entries => {
