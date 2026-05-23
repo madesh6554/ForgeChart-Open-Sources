@@ -2028,6 +2028,7 @@
       height: 520px; /* match Left Column Canvas height */
       max-height: 520px;
       transition: height 0.3s ease, max-height 0.3s ease;
+      overflow: hidden; /* Prevent child overflow spillout */
     }
     html[data-theme="light"] .module-gallery-wrapper {
       background: rgba(255, 255, 255, 0.55);
@@ -2117,25 +2118,36 @@
       align-content: start; /* Prevent cards from stretching vertically */
     }
     .module-gallery-wrapper.gallery-fixed-height .gallery-cards-grid {
-      flex: 1;
+      height: 260px; /* Guarantee height constraint for scrollbar activation */
       overflow-y: auto; /* Constrained scrolling only inside fixed-height wrapper */
-      min-height: 0;
       padding-right: 4px;
     }
     
     /* Custom premium scrollbar for gallery cards grid */
     .gallery-cards-grid::-webkit-scrollbar {
-      width: 4px;
+      width: 6px;
     }
     .gallery-cards-grid::-webkit-scrollbar-track {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.05); /* Visible scrollbar track line */
     }
     .gallery-cards-grid::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
+      background: rgba(229, 9, 20, 0.4); /* Visible red accent thumb */
+      border-radius: 3px;
+    }
+    .gallery-cards-grid::-webkit-scrollbar-thumb:hover {
+      background: rgba(229, 9, 20, 0.7);
+    }
+    html[data-theme="light"] .gallery-cards-grid::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.05);
     }
     html[data-theme="light"] .gallery-cards-grid::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.08);
+      background: rgba(229, 9, 20, 0.3);
+    }
+    html[data-theme="light"] .gallery-cards-grid::-webkit-scrollbar-thumb:hover {
+      background: rgba(229, 9, 20, 0.6);
     }
     .gallery-card {
       background: rgba(12, 12, 13, 0.6);
@@ -2529,6 +2541,7 @@
       .gallery-cards-grid,
       .module-gallery-wrapper.gallery-fixed-height .gallery-cards-grid {
         overflow-y: visible !important;
+        height: auto !important; /* Override desktop height constraints */
         grid-template-columns: 1fr 1fr;
       }
     }
