@@ -2976,23 +2976,37 @@
     .c-comment { color: var(--text-dark); }
     .c-success { color: #4ade80; }
 
-    /* ─── ROADMAP & TIMELINE ─── */
-    .road-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
+    /* ─── ROADMAP MARQUEE ─── */
+    .road-marquee-wrap {
+      overflow: hidden;
       margin-top: 3rem;
+      position: relative;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    }
+    .road-marquee-track {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+      animation: roadScroll 38s linear infinite;
+    }
+    .road-marquee-track:hover { animation-play-state: paused; }
+    @keyframes roadScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
     .road-card {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 14px;
       padding: 20px;
-      transition: all 0.3s;
+      width: 270px;
+      flex-shrink: 0;
+      transition: border-color 0.3s, transform 0.3s;
     }
     .road-card:hover {
-      border-color: rgba(255,255,255,0.1);
-      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-3px);
     }
     .road-tag {
       display: inline-flex;
@@ -6323,51 +6337,28 @@
         <p class="sec-desc">Upcoming automation nodes, infrastructure upgrades, and enterprise features planned for the next builds — all open for community contributions.</p>
       </div>
 
-      <div class="road-grid">
-        <div class="road-card rv">
-          <span class="road-tag soon">Soon</span>
-          <h3 class="road-title">Condition / Branch Node</h3>
-          <p class="road-desc">Add if/else logic to your flows — split paths based on message content, contact tags, or custom variables for smarter automation.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.1s;">
-          <span class="road-tag soon">Soon</span>
-          <h3 class="road-title">Delay &amp; Wait Node</h3>
-          <p class="road-desc">Pause a flow for a defined duration before the next node fires — ideal for follow-up sequences, reminders, and drip campaigns.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.15s;">
-          <span class="road-tag soon">Soon</span>
-          <h3 class="road-title">HTTP API Call Node</h3>
-          <p class="road-desc">Connect flows to external services — call any REST endpoint, send webhooks, or pull live data from your own backend or third-party APIs.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.2s;">
-          <span class="road-tag soon">Soon</span>
-          <h3 class="road-title">Loop Node</h3>
-          <p class="road-desc">Iterate over a list of contacts, responses, or values and apply repeated actions within a single automated flow.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.25s;">
-          <span class="road-tag soon">Soon</span>
-          <h3 class="road-title">WebSocket Real-time Logs</h3>
-          <p class="road-desc">Upgrade polling to persistent WebSocket connections for zero-delay incoming message updates and live flow execution logs.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.3s;">
-          <span class="road-tag soon">Soon</span>
-          <h3 class="road-title">Docker Compose Support</h3>
-          <p class="road-desc">Bundle Postgres, Redis, and the backend engine into a single unified container for one-click VPS deploys.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.35s;">
-          <span class="road-tag pro">Pro</span>
-          <h3 class="road-title">Visual Automation Designer</h3>
-          <p class="road-desc">A drag-and-drop workflow canvas with full node library — conditions, delays, API calls, loops, and branching logic in one visual editor.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.4s;">
-          <span class="road-tag pro">Pro</span>
-          <h3 class="road-title">Multi-User &amp; Role Permissions</h3>
-          <p class="road-desc">Invite teammates, assign agents to specific conversations, and configure role-based access across your entire workspace.</p>
-        </div>
-        <div class="road-card rv" style="animation-delay: 0.45s;">
-          <span class="road-tag" style="background:rgba(167,139,250,0.08);color:#a78bfa;border:1px solid rgba(167,139,250,0.18);">AI</span>
-          <h3 class="road-title">AI Automation Engine</h3>
-          <p class="road-desc">An LLM-powered automation node — understands message intent, classifies conversations, and routes them intelligently. OpenAI, Anthropic &amp; Gemini compatible. In development.</p>
+      <div class="road-marquee-wrap">
+        <div class="road-marquee-track">
+          <!-- Set 1 -->
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Condition / Branch Node</h3><p class="road-desc">Add if/else logic to your flows — split paths based on message content, contact tags, or custom variables for smarter automation.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Delay &amp; Wait Node</h3><p class="road-desc">Pause a flow for a defined duration before the next node fires — ideal for follow-up sequences, reminders, and drip campaigns.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">HTTP API Call Node</h3><p class="road-desc">Connect flows to external services — call any REST endpoint, send webhooks, or pull live data from your own backend or third-party APIs.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Loop Node</h3><p class="road-desc">Iterate over a list of contacts, responses, or values and apply repeated actions within a single automated flow.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">WebSocket Real-time Logs</h3><p class="road-desc">Upgrade polling to persistent WebSocket connections for zero-delay incoming message updates and live flow execution logs.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Docker Compose Support</h3><p class="road-desc">Bundle Postgres, Redis, and the backend engine into a single unified container for one-click VPS deploys.</p></div>
+          <div class="road-card"><span class="road-tag pro">Pro</span><h3 class="road-title">Visual Automation Designer</h3><p class="road-desc">A drag-and-drop workflow canvas with full node library — conditions, delays, API calls, loops, and branching logic in one visual editor.</p></div>
+          <div class="road-card"><span class="road-tag pro">Pro</span><h3 class="road-title">Multi-User &amp; Role Permissions</h3><p class="road-desc">Invite teammates, assign agents to specific conversations, and configure role-based access across your entire workspace.</p></div>
+          <div class="road-card"><span class="road-tag" style="background:rgba(167,139,250,0.08);color:#a78bfa;border:1px solid rgba(167,139,250,0.18);">AI</span><h3 class="road-title">AI Automation Engine</h3><p class="road-desc">An LLM-powered automation node — understands message intent, classifies conversations, and routes them intelligently. OpenAI, Anthropic &amp; Gemini compatible.</p></div>
+          <!-- Set 2 — duplicate for seamless loop -->
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Condition / Branch Node</h3><p class="road-desc">Add if/else logic to your flows — split paths based on message content, contact tags, or custom variables for smarter automation.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Delay &amp; Wait Node</h3><p class="road-desc">Pause a flow for a defined duration before the next node fires — ideal for follow-up sequences, reminders, and drip campaigns.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">HTTP API Call Node</h3><p class="road-desc">Connect flows to external services — call any REST endpoint, send webhooks, or pull live data from your own backend or third-party APIs.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Loop Node</h3><p class="road-desc">Iterate over a list of contacts, responses, or values and apply repeated actions within a single automated flow.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">WebSocket Real-time Logs</h3><p class="road-desc">Upgrade polling to persistent WebSocket connections for zero-delay incoming message updates and live flow execution logs.</p></div>
+          <div class="road-card"><span class="road-tag soon">Soon</span><h3 class="road-title">Docker Compose Support</h3><p class="road-desc">Bundle Postgres, Redis, and the backend engine into a single unified container for one-click VPS deploys.</p></div>
+          <div class="road-card"><span class="road-tag pro">Pro</span><h3 class="road-title">Visual Automation Designer</h3><p class="road-desc">A drag-and-drop workflow canvas with full node library — conditions, delays, API calls, loops, and branching logic in one visual editor.</p></div>
+          <div class="road-card"><span class="road-tag pro">Pro</span><h3 class="road-title">Multi-User &amp; Role Permissions</h3><p class="road-desc">Invite teammates, assign agents to specific conversations, and configure role-based access across your entire workspace.</p></div>
+          <div class="road-card"><span class="road-tag" style="background:rgba(167,139,250,0.08);color:#a78bfa;border:1px solid rgba(167,139,250,0.18);">AI</span><h3 class="road-title">AI Automation Engine</h3><p class="road-desc">An LLM-powered automation node — understands message intent, classifies conversations, and routes them intelligently. OpenAI, Anthropic &amp; Gemini compatible.</p></div>
         </div>
       </div>
     </div>
