@@ -994,6 +994,7 @@
       animation: pulsePedestal 5s ease-in-out infinite;
     }
     
+    @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes spinPedestal {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -2205,6 +2206,246 @@
       font-size: 9.5px;
       color: var(--text-dim);
       margin: 0;
+    }
+
+    /* --- n8n WORKFLOW CANVAS ENHANCEMENTS --- */
+    
+    /* Canvas Mode Switcher inside Header */
+    .canvas-mode-switcher {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 2px;
+      gap: 2px;
+      margin-left: 14px;
+    }
+    html[data-theme="light"] .canvas-mode-switcher {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .mode-btn:hover {
+      color: var(--text);
+    }
+    .mode-btn.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--red-hi);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+    html[data-theme="light"] .mode-btn.active {
+      background: #ffffff;
+      color: var(--red);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Draggable Nodes and cursors */
+    .canvas-mode-editor .canvas-node {
+      cursor: grab;
+    }
+    .canvas-mode-editor .canvas-node.dragging {
+      cursor: grabbing;
+      transform: scale(1.03) !important;
+      opacity: 0.9;
+      z-index: 50;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      border-color: rgba(229, 9, 20, 0.5);
+    }
+    html[data-theme="light"] .canvas-mode-editor .canvas-node.dragging {
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      border-color: var(--red);
+    }
+    .canvas-mode-executions .canvas-node {
+      cursor: pointer;
+    }
+
+    /* Execution latency badge */
+    .node-latency-badge {
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(37, 211, 102, 0.95);
+      border: 1px solid var(--black);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translate(-50%, 4px);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      z-index: 5;
+    }
+    html[data-theme="light"] .node-latency-badge {
+      border-color: #fff;
+      background: #16a34a;
+    }
+    .node-latency-badge.visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* Parameters Config Drawer (n8n-style) */
+    .node-config-drawer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 290px;
+      background: rgba(15, 15, 17, 0.93);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-left: 1px solid var(--glass-border);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -8px 0 24px rgba(0, 0, 0, 0.35);
+    }
+    html[data-theme="light"] .node-config-drawer {
+      background: rgba(255, 255, 255, 0.95);
+      border-left-color: rgba(0, 0, 0, 0.08);
+      box-shadow: -8px 0 24px rgba(0, 0, 0, 0.04);
+    }
+    .node-config-drawer.open {
+      transform: translateX(0);
+    }
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    html[data-theme="light"] .drawer-header {
+      border-bottom-color: rgba(0, 0, 0, 0.08);
+    }
+    .drawer-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    html[data-theme="light"] .drawer-title {
+      color: var(--text);
+    }
+    .drawer-title svg {
+      width: 14px;
+      height: 14px;
+    }
+    .drawer-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .drawer-close-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    html[data-theme="light"] .drawer-close-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .drawer-body {
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .drawer-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .drawer-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+    }
+    .drawer-input, .drawer-select {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    html[data-theme="light"] .drawer-input, html[data-theme="light"] .drawer-select {
+      background: #f8f9fa;
+      border-color: rgba(0, 0, 0, 0.08);
+      color: var(--text);
+    }
+    .drawer-input:focus, .drawer-select:focus {
+      border-color: var(--red-hi);
+      box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.15);
+    }
+    html[data-theme="light"] .drawer-input:focus, html[data-theme="light"] .drawer-select:focus {
+      border-color: var(--red);
+    }
+    .drawer-input[readonly] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .drawer-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: flex-end;
+      background: rgba(5, 5, 5, 0.2);
+    }
+    html[data-theme="light"] .drawer-footer {
+      border-top-color: rgba(0, 0, 0, 0.08);
+      background: rgba(0, 0, 0, 0.01);
+    }
+    .drawer-save-btn {
+      background: var(--red-hi);
+      border: none;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .drawer-save-btn:hover {
+      opacity: 0.9;
+    }
+    html[data-theme="light"] .drawer-save-btn {
+      background: var(--red);
     }
 
 
@@ -3445,6 +3686,40 @@
     }
 
     /* ─── CHATS LIVE CONVERSATION STREAM WIDGET ─── */
+    /* ── Template approval flow widget ── */
+    .tpl-flow {
+      margin: 1rem 0 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .tpl-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      font-size: 12px;
+      color: var(--text-dim);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .fcard:hover .tpl-step { background: rgba(255,255,255,0.04); }
+    .tpl-step .tpl-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .tpl-step.done   { border-color: rgba(37,211,102,0.18); }
+    .tpl-step.done   .tpl-dot { background: #25D366; box-shadow: 0 0 5px rgba(37,211,102,0.5); }
+    .tpl-step.done   span { color: #25D366; font-weight: 600; }
+    .tpl-step.review { border-color: rgba(251,191,36,0.18); }
+    .tpl-step.review .tpl-dot { background: #fbbf24; box-shadow: 0 0 5px rgba(251,191,36,0.4); }
+    .tpl-step.review span { color: #fbbf24; font-weight: 600; }
+    .tpl-step.draft  { border-color: rgba(255,255,255,0.06); }
+    .tpl-step.draft  .tpl-dot { background: var(--text-dark); }
+    html[data-theme="light"] .tpl-step { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.06); color: #555; }
+    html[data-theme="light"] .fcard:hover .tpl-step { background: rgba(0,0,0,0.04); }
+    /* ── End template flow ── */
     .mini-chat-list-gfx {
       margin: 1rem 0;
       display: flex;
@@ -5189,6 +5464,24 @@
               </div>
               <div class="fname">Message Templates</div>
               <div class="fdesc">Draft interactive message templates, submit them directly to the Meta Developer Platform for review, track approval status, and preview them live.</div>
+
+              <!-- Template approval status flow -->
+              <div class="tpl-flow">
+                <div class="tpl-step done">
+                  <div class="tpl-dot"></div>
+                  <span>Meta Approved</span>
+                  <svg style="margin-left:auto;color:#25D366" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="tpl-step review">
+                  <div class="tpl-dot"></div>
+                  <span>In Review</span>
+                  <svg style="margin-left:auto;color:#fbbf24;animation:spin 2s linear infinite" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                </div>
+                <div class="tpl-step draft">
+                  <div class="tpl-dot"></div>
+                  <span>Draft</span>
+                </div>
+              </div>
             </div>
             <div class="flimit">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E8A317" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -5256,15 +5549,28 @@
       <div class="modules-bento-layout rv" style="animation-delay: 0.1s;">
         
         <!-- Left Column: Live Automation Canvas (n8n-style) -->
-        <div class="workflow-canvas-container">
+        <div class="workflow-canvas-container canvas-mode-editor">
           <div class="canvas-dot-grid"></div>
           <div class="canvas-nav-bar">
             <div class="cnb-left">
               <span class="cnb-title">Live Automation Canvas</span>
               <span class="cnb-desc">Interactive workflow simulation</span>
             </div>
+            
+            <!-- Editor / Executions Switcher -->
+            <div class="canvas-mode-switcher">
+              <button class="mode-btn active" id="btnModeEditor" onclick="switchCanvasMode('editor')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 11px; height: 11px; margin-right: 5px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Editor
+              </button>
+              <button class="mode-btn" id="btnModeExecutions" onclick="switchCanvasMode('executions')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 11px; height: 11px; margin-right: 5px;"><polygon points="5 3 19 12 5 21 5 3"/><path d="M12 2v20"/></svg>
+                Executions
+              </button>
+            </div>
+
             <div class="cnb-right">
-              <button class="cnb-btn run" id="btnRunWorkflow">
+              <button class="cnb-btn run" id="btnRunWorkflow" onclick="runWorkflowSimulation()">
                 <svg viewBox="0 0 24 24" fill="currentColor" style="width: 11px; height: 11px; margin-right: 4px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 Run
               </button>
@@ -5292,6 +5598,24 @@
               <button class="zoom-btn lock" id="btnLockCanvas" onclick="toggleCanvasLock()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 10px; height: 10px;" id="lockIcon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </button>
+            </div>
+          </div>
+
+          <!-- Parameter Configuration Drawer -->
+          <div class="node-config-drawer" id="nodeConfigDrawer">
+            <div class="drawer-header">
+              <div class="drawer-title" id="drawerTitle">
+                <!-- Populated dynamically via JS -->
+              </div>
+              <button class="drawer-close-btn" onclick="closeNodeDrawer()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="drawer-body" id="drawerBody">
+              <!-- Populated dynamically via JS -->
+            </div>
+            <div class="drawer-footer">
+              <button class="drawer-save-btn" onclick="saveNodeParams()">Save Parameters</button>
             </div>
           </div>
         </div>
@@ -6059,6 +6383,8 @@
     let canvasZoom = 1;
     let canvasLocked = false;
     let isRunningSim = false;
+    let canvasMode = "editor";
+    let editingNodeId = null;
 
     function getNodeIcon(icon) {
       switch (icon) {
@@ -6136,6 +6462,7 @@
             <div class="node-indicator">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 7px; height: 7px;"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
+            <div class="node-latency-badge"></div>
           </div>
         `;
       });
@@ -6181,6 +6508,7 @@
 
     function selectModuleCard(moduleKey) {
       currentActiveModule = moduleKey;
+      closeNodeDrawer();
       
       // Update selected class in gallery cards
       document.querySelectorAll(".gallery-card").forEach(c => {
@@ -6229,25 +6557,321 @@
       }
     }
 
+    // ─── NEW CANVAS MODE AND DRAG CONTROLS ───
+    function updateConnections(moduleKey) {
+      const schema = workflowSchemas[moduleKey];
+      if (!schema) return;
+      
+      schema.connections.forEach(conn => {
+        const fromNode = schema.nodes.find(n => n.id === conn.from);
+        const toNode = schema.nodes.find(n => n.id === conn.to);
+        if (fromNode && toNode) {
+          const startX = fromNode.x + 145;
+          const startY = fromNode.y + 26;
+          const endX = toNode.x;
+          const endY = toNode.y + 26;
+          const dx = Math.abs(endX - startX) * 0.5;
+          const dPath = `M ${startX} ${startY} C ${startX + dx} ${startY}, ${endX - dx} ${endY}, ${endX} ${endY}`;
+          
+          const pathEl = document.querySelector(`path.connector-path[data-connection-from="${conn.from}"][data-connection-to="${conn.to}"]`);
+          if (pathEl) {
+            pathEl.setAttribute('d', dPath);
+          }
+        }
+      });
+    }
+
+    let activeDragNodeId = null;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragOrigX = 0;
+    let dragOrigY = 0;
+    let isMovingNode = false;
+
+    function initNodeDragging() {
+      const area = document.getElementById("canvasWorkflowArea");
+      if (!area) return;
+
+      area.addEventListener('pointerdown', (e) => {
+        if (canvasMode !== 'editor' || canvasLocked) return;
+        
+        const nodeEl = e.target.closest('.canvas-node');
+        if (!nodeEl) return;
+        
+        e.preventDefault();
+        
+        activeDragNodeId = parseInt(nodeEl.dataset.nodeId);
+        const schema = workflowSchemas[currentActiveModule];
+        const node = schema.nodes.find(n => n.id === activeDragNodeId);
+        if (!node) return;
+
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        dragOrigX = node.x;
+        dragOrigY = node.y;
+        isMovingNode = false;
+        
+        nodeEl.classList.add('dragging');
+        nodeEl.setPointerCapture(e.pointerId);
+      });
+
+      area.addEventListener('pointermove', (e) => {
+        if (activeDragNodeId === null) return;
+        
+        const schema = workflowSchemas[currentActiveModule];
+        const node = schema.nodes.find(n => n.id === activeDragNodeId);
+        if (!node) return;
+
+        const dx = (e.clientX - dragStartX) / canvasZoom;
+        const dy = (e.clientY - dragStartY) / canvasZoom;
+
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+          isMovingNode = true;
+        }
+
+        if (isMovingNode) {
+          const container = document.getElementById("canvasWorkflowArea");
+          const containerWidth = container.clientWidth;
+          const containerHeight = container.clientHeight;
+          
+          node.x = Math.max(5, Math.min(containerWidth - 150, dragOrigX + dx));
+          node.y = Math.max(5, Math.min(containerHeight - 57, dragOrigY + dy));
+
+          const nodeEl = document.querySelector(`[data-node-id="${activeDragNodeId}"]`);
+          if (nodeEl) {
+            nodeEl.style.left = `${node.x}px`;
+            nodeEl.style.top = `${node.y}px`;
+          }
+
+          updateConnections(currentActiveModule);
+        }
+      });
+
+      const handlePointerUp = (e) => {
+        if (activeDragNodeId === null) return;
+        
+        const nodeEl = document.querySelector(`[data-node-id="${activeDragNodeId}"]`);
+        if (nodeEl) {
+          nodeEl.classList.remove('dragging');
+          try {
+            nodeEl.releasePointerCapture(e.pointerId);
+          } catch(err) {}
+        }
+
+        if (!isMovingNode) {
+          openNodeDrawer(activeDragNodeId);
+        }
+
+        activeDragNodeId = null;
+        isMovingNode = false;
+      };
+
+      area.addEventListener('pointerup', handlePointerUp);
+      area.addEventListener('pointercancel', (e) => {
+        if (activeDragNodeId === null) return;
+        const nodeEl = document.querySelector(`[data-node-id="${activeDragNodeId}"]`);
+        if (nodeEl) {
+          nodeEl.classList.remove('dragging');
+          try {
+            nodeEl.releasePointerCapture(e.pointerId);
+          } catch(err) {}
+        }
+        activeDragNodeId = null;
+        isMovingNode = false;
+      });
+    }
+
+    function switchCanvasMode(mode) {
+      canvasMode = mode;
+      
+      const container = document.querySelector('.workflow-canvas-container');
+      const btnEditor = document.getElementById('btnModeEditor');
+      const btnExecutions = document.getElementById('btnModeExecutions');
+      
+      if (mode === 'editor') {
+        container.classList.remove('canvas-mode-executions');
+        container.classList.add('canvas-mode-editor');
+        if (btnEditor) btnEditor.classList.add('active');
+        if (btnExecutions) btnExecutions.classList.remove('active');
+        
+        document.querySelectorAll('.node-latency-badge').forEach(b => {
+          b.classList.remove('visible');
+        });
+      } else {
+        container.classList.remove('canvas-mode-editor');
+        container.classList.add('canvas-mode-executions');
+        if (btnEditor) btnEditor.classList.remove('active');
+        if (btnExecutions) btnExecutions.classList.add('active');
+        
+        runWorkflowSimulation();
+      }
+    }
+
+    function openNodeDrawer(nodeId) {
+      editingNodeId = parseInt(nodeId);
+      const schema = workflowSchemas[currentActiveModule];
+      const node = schema.nodes.find(n => n.id === editingNodeId);
+      if (!node) return;
+
+      const drawer = document.getElementById("nodeConfigDrawer");
+      const titleEl = document.getElementById("drawerTitle");
+      const bodyEl = document.getElementById("drawerBody");
+
+      // Dynamic title with icon
+      titleEl.innerHTML = `
+        <span class="node-icon-box ${node.cat === 'core' ? 'green' : (node.cat === 'auto' ? 'red' : (node.cat === 'broadcast' ? 'yellow' : 'purple'))}">
+          ${getNodeIcon(node.icon)}
+        </span>
+        <span>Configure: ${node.title}</span>
+      `;
+
+      // Build fields depending on type/category
+      let formHtml = `
+        <div class="drawer-group">
+          <label class="drawer-label">Node Label</label>
+          <input type="text" class="drawer-input" id="editNodeTitle" value="${node.title}" oninput="handleNodeTitleLiveUpdate(this.value)">
+        </div>
+        <div class="drawer-group">
+          <label class="drawer-label">Description</label>
+          <input type="text" class="drawer-input" id="editNodeDesc" value="${node.desc}">
+        </div>
+      `;
+
+      if (node.cat === 'webhook') {
+        formHtml += `
+          <div class="drawer-group">
+            <label class="drawer-label">Webhook Path</label>
+            <input type="text" class="drawer-input" readonly value="/v1/webhooks/${node.type}-${node.id}">
+          </div>
+          <div class="drawer-group">
+            <label class="drawer-label">HTTP Method</label>
+            <select class="drawer-select" id="editNodeMethod">
+              <option value="GET">GET</option>
+              <option value="POST" selected>POST</option>
+              <option value="PUT">PUT</option>
+            </select>
+          </div>
+        `;
+      } else if (node.cat === 'auto') {
+        formHtml += `
+          <div class="drawer-group">
+            <label class="drawer-label">Action Target</label>
+            <select class="drawer-select" id="editNodeAction">
+              <option value="validate">Validate Data Payload</option>
+              <option value="ai-suggest" ${node.title.includes('LLM') ? 'selected' : ''}>LLM Suggest Draft</option>
+              <option value="router" ${node.title.includes('Hours') ? 'selected' : ''}>Business Hours Router</option>
+            </select>
+          </div>
+          <div class="drawer-group">
+            <label class="drawer-label">Retry Limits</label>
+            <input type="number" class="drawer-input" id="editNodeRetries" value="3">
+          </div>
+        `;
+      } else if (node.cat === 'broadcast') {
+        formHtml += `
+          <div class="drawer-group">
+            <label class="drawer-label">Message Flow Template</label>
+            <select class="drawer-select" id="editNodeTemplate">
+              <option value="onboard">Welcome & Onboard sequence</option>
+              <option value="promo" selected>Summer blast promo</option>
+              <option value="reengage">Inactive user wakeup</option>
+            </select>
+          </div>
+        `;
+      } else if (node.cat === 'core') {
+        formHtml += `
+          <div class="drawer-group">
+            <label class="drawer-label">Data Store</label>
+            <select class="drawer-select" id="editNodeStorage">
+              <option value="contacts">Contacts Database</option>
+              <option value="messages" selected>Active Chat Logs</option>
+              <option value="archives">Inbox Archives</option>
+            </select>
+          </div>
+          <div class="drawer-group">
+            <label class="drawer-label">Limit Queries</label>
+            <input type="number" class="drawer-input" id="editNodeLimit" value="100">
+          </div>
+        `;
+      }
+
+      bodyEl.innerHTML = formHtml;
+      drawer.classList.add("open");
+    }
+
+    function handleNodeTitleLiveUpdate(val) {
+      if (editingNodeId === null) return;
+      const nodeEl = document.querySelector(`[data-node-id="${editingNodeId}"]`);
+      if (nodeEl) {
+        const titleEl = nodeEl.querySelector('.node-title');
+        if (titleEl) titleEl.textContent = val || 'Node';
+      }
+    }
+
+    function saveNodeParams() {
+      if (editingNodeId === null) return;
+      const schema = workflowSchemas[currentActiveModule];
+      const node = schema.nodes.find(n => n.id === editingNodeId);
+      if (!node) return;
+
+      const titleVal = document.getElementById("editNodeTitle").value;
+      const descVal = document.getElementById("editNodeDesc").value;
+
+      node.title = titleVal;
+      node.desc = descVal;
+
+      // Update node details on canvas
+      const nodeEl = document.querySelector(`[data-node-id="${editingNodeId}"]`);
+      if (nodeEl) {
+        nodeEl.querySelector('.node-title').textContent = titleVal;
+        nodeEl.querySelector('.node-desc').textContent = descVal;
+      }
+
+      closeNodeDrawer();
+    }
+
+    function closeNodeDrawer() {
+      const drawer = document.getElementById("nodeConfigDrawer");
+      if (drawer) {
+        drawer.classList.remove("open");
+      }
+      editingNodeId = null;
+    }
+
     // Workflow Simulation Playback
     function runWorkflowSimulation() {
       if (isRunningSim) return;
+      
+      // If we are not in executions mode, switch mode and let it trigger run
+      if (canvasMode !== 'executions') {
+        switchCanvasMode('executions');
+        return;
+      }
+
       isRunningSim = true;
       const btn = document.getElementById('btnRunWorkflow');
-      btn.disabled = true;
-      btn.style.opacity = '0.6';
+      if (btn) {
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+      }
       
       const currentSchema = workflowSchemas[currentActiveModule];
       if (!currentSchema) {
         isRunningSim = false;
-        btn.disabled = false;
-        btn.style.opacity = '';
+        if (btn) {
+          btn.disabled = false;
+          btn.style.opacity = '';
+        }
         return;
       }
       
-      // Reset all connections and nodes animations
+      // Reset all connections and nodes animations and latency badges
       document.querySelectorAll('.connector-path').forEach(p => p.classList.remove('active-flow'));
       document.querySelectorAll('.canvas-node').forEach(n => n.classList.remove('pulse-node'));
+      document.querySelectorAll('.node-latency-badge').forEach(b => {
+        b.classList.remove('visible');
+        b.textContent = '';
+      });
       
       // Sort nodes by X coordinate to simulate data flow sequence
       const sortedNodes = [...currentSchema.nodes].sort((a, b) => a.x - b.x);
@@ -6259,6 +6883,15 @@
           const nodeEl = document.querySelector(`[data-node-id="${node.id}"]`);
           if (nodeEl) {
             nodeEl.classList.add('pulse-node');
+            
+            // Show latency badge in executions mode
+            const latencyEl = nodeEl.querySelector('.node-latency-badge');
+            if (latencyEl) {
+              const mockLatency = node.type === 'webhook' ? 'trigger' : `+${Math.floor(Math.random() * 80) + 10}ms`;
+              latencyEl.textContent = mockLatency;
+              latencyEl.classList.add('visible');
+            }
+
             setTimeout(() => nodeEl.classList.remove('pulse-node'), 600);
           }
           
@@ -6277,8 +6910,10 @@
           // Finished simulation
           setTimeout(() => {
             document.querySelectorAll('.connector-path').forEach(p => p.classList.remove('active-flow'));
-            btn.disabled = false;
-            btn.style.opacity = '';
+            if (btn) {
+              btn.disabled = false;
+              btn.style.opacity = '';
+            }
             isRunningSim = false;
           }, 1500);
         }
@@ -6620,6 +7255,10 @@
           });
         }
       }
+
+      // Initialize workflow canvas dragging and load default workflow
+      initNodeDragging();
+      selectModuleCard('home-dashboard');
 
       // Initial simulation start
       setTimeout(() => runConsoleStep(1, false), 800);
