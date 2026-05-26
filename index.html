@@ -496,6 +496,13 @@
       pointer-events: none;
       mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 95%);
     }
+    .glow-wrap {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
     .glow-field {
       position: absolute;
       width: 500px;
@@ -540,6 +547,14 @@
       padding: 4px 10px;
       border-radius: 100px;
       border: 1px solid rgba(229, 9, 20, 0.15);
+    }
+    @media (max-width: 480px) {
+      .sec-tag {
+        font-size: 9px;
+        letter-spacing: 0.05em;
+        padding: 3px 8px;
+        gap: 4px;
+      }
     }
     .sec-tag .pulse-dot {
       width: 6px;
@@ -680,6 +695,35 @@
       display: flex;
       align-items: center;
       gap: 12px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 6px 12px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      color: var(--text);
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.04);
+    }
+    html[data-theme="light"] .back-btn {
+      color: #5C5C64;
+      border-color: rgba(0,0,0,0.12);
+    }
+    html[data-theme="light"] .back-btn:hover {
+      color: #111;
+      border-color: rgba(0,0,0,0.25);
+      background: rgba(0,0,0,0.04);
     }
     /* ── GitHub-style split star button ── */
     .gh-star-btn {
@@ -3217,6 +3261,7 @@
       }
     }
     @media (max-width: 768px) {
+      .hero { padding: 5rem 0 3rem; }
       .sec { padding: 3rem 0; }
       .hero-h1 {
         font-size: clamp(1.8rem, 8.5vw, 2.8rem);
@@ -3227,6 +3272,7 @@
       /* keep nav-act visible on mobile but hide the theme toggle to save space */
       .nav-act { display: flex; gap: 8px; }
       .nav-act .theme-toggle { display: none; }
+      .nav-act .back-btn { display: none; }
       .ham { display: flex; }
       /* star button compact on mobile — count always visible */
       .gh-star-right { display: flex !important; }
@@ -4997,44 +5043,6 @@
       pointer-events: none;
     }
 
-    /* ─── CUSTOM CURSOR ─── */
-    .custom-cursor-active { cursor: none !important; }
-    .custom-cursor-active a,
-    .custom-cursor-active button,
-    .custom-cursor-active [onclick],
-    .custom-cursor-active input,
-    .custom-cursor-active label { cursor: none !important; }
-    #cursor-dot {
-      position: fixed;
-      width: 5px; height: 5px;
-      background: var(--red-hi);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      top: 0; left: 0;
-      transform: translate(-200vw, -200vh);
-      transition: width 0.18s, height 0.18s, background 0.18s, opacity 0.2s;
-      will-change: transform;
-    }
-    #cursor-ring {
-      position: fixed;
-      width: 32px; height: 32px;
-      border: 1.5px solid rgba(229,9,20,0.42);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      top: 0; left: 0;
-      transform: translate(-200vw, -200vh);
-      transition: width 0.22s cubic-bezier(0.16,1,0.3,1),
-                  height 0.22s cubic-bezier(0.16,1,0.3,1),
-                  border-color 0.22s, opacity 0.2s;
-      will-change: transform;
-    }
-    .cursor-hover  #cursor-ring { width: 52px; height: 52px; border-color: rgba(229,9,20,0.72); }
-    .cursor-hover  #cursor-dot  { width: 8px; height: 8px; }
-    .cursor-click  #cursor-ring { width: 22px; height: 22px; border-color: var(--red-hi); }
-    html[data-theme="light"] #cursor-ring { border-color: rgba(229,9,20,0.35); }
-    html[data-theme="light"].cursor-hover #cursor-ring { border-color: rgba(229,9,20,0.65); }
 
     /* ─── MAGNETIC BTN SHINE ─── */
     .btn-red {
@@ -5105,6 +5113,236 @@
       body { animation: none; }
     }
 
+  /* ═══ Feature Showcase ═══ */
+  .ifc-wrap{background:var(--gray);border:1px solid rgba(255,255,255,.06);border-radius:20px;overflow:hidden}
+  html[data-theme="light"] .ifc-wrap{background:#EEEEF4;border-color:rgba(0,0,0,.08)}
+  .ifc-header{padding:40px 36px 0;text-align:center}
+  .ifc-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
+    letter-spacing:.10em;text-transform:uppercase;color:var(--red-hi);
+    background:var(--red-dim);border:1px solid var(--red-glow);
+    padding:6px 14px;border-radius:999px;margin-bottom:16px;font-family:var(--font-body)}
+  .ifc-eyebrow svg{width:14px;height:14px}
+  .ifc-h2{font-family:var(--font-title);font-size:32px;font-weight:700;letter-spacing:-.02em;
+    color:var(--text);margin:0 0 10px;line-height:1.2}
+  .ifc-sub{font-size:15px;color:var(--text-dim);margin:0 0 30px;font-family:var(--font-body)}
+  html[data-theme="light"] .ifc-h2{color:#0C0C0E}
+  html[data-theme="light"] .ifc-sub{color:#50505C}
+
+  .ifc-marquee-row {
+    border-top: 1px solid rgba(255,255,255,.06);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 18px 0;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 80px, #000 calc(100% - 80px), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 80px, #000 calc(100% - 80px), transparent);
+  }
+  .ifc-marquee-row::-webkit-scrollbar {
+    display: none;
+  }
+  .ifc-marquee-row {
+    scrollbar-width: none;
+  }
+  html[data-theme="light"] .ifc-marquee-row{border-color:rgba(0,0,0,.07)}
+  .ifc-marquee-track {
+    display: flex;
+    width: max-content;
+    padding: 0 120px;
+  }
+  .ifc-pill{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+    padding:7px 15px;margin:0 5px;border-radius:999px;font-size:13px;font-weight:600;
+    cursor:pointer;border:1.5px solid rgba(255,255,255,.08);color:var(--text-dark);
+    background:rgba(255,255,255,.03);transition:border-color .18s,color .18s,background .18s;
+    user-select:none;flex:0 0 auto;font-family:var(--font-body)}
+  .ifc-pill:hover{border-color:rgba(255,255,255,.22);color:var(--text);background:rgba(255,255,255,.07)}
+  .ifc-pill.active{color:#fff}
+  html[data-theme="light"] .ifc-pill{border-color:rgba(0,0,0,.1);color:#6B6B78;background:rgba(0,0,0,.03)}
+  html[data-theme="light"] .ifc-pill:hover{border-color:rgba(0,0,0,.2);color:#1a1a22;background:rgba(0,0,0,.06)}
+  html[data-theme="light"] .ifc-pill.active{color:#1a1a22}
+  .ifc-dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto;opacity:.8}
+
+  .ifc-content{display:flex;gap:24px;padding:28px 36px 40px;align-items:stretch;min-height:380px}
+  .ifc-media{flex:0 0 54%}
+  .ifc-gif-frame {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(12, 12, 13, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--glass-glow);
+    transition: all 0.3s;
+  }
+  html[data-theme="light"] .ifc-gif-frame{border-color:rgba(0,0,0,.08);background:rgba(255,255,255,0.65)}
+  .ifc-gif-img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;display:block;background:#0C0C0D}
+  .ifc-gif-img.is-gif{object-fit:cover}
+  html[data-theme="light"] .ifc-gif-img{background:#f0f0f5}
+  .ifc-ph-inner{position:relative;z-index:1;display:flex;flex-direction:column;
+    align-items:center;gap:14px;padding:32px;text-align:center}
+  .ifc-ph-icon{width:72px;height:72px;border-radius:18px;display:flex;
+    align-items:center;justify-content:center;flex:0 0 auto}
+  .ifc-ph-icon svg{width:36px;height:36px}
+  .ifc-ph-label{font-size:11.5px;color:rgba(255,255,255,.28);letter-spacing:.06em;
+    text-transform:uppercase;font-family:var(--font-mono)}
+  html[data-theme="light"] .ifc-ph-label{color:rgba(0,0,0,.35)}
+  .ifc-frame-bottom{position:absolute;bottom:0;left:0;right:0;padding:12px 18px;
+    background:linear-gradient(to top,rgba(12,12,13,.9),transparent);
+    font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:rgba(255,255,255,.35);font-family:var(--font-body)}
+  html[data-theme="light"] .ifc-frame-bottom{background:linear-gradient(to top,rgba(240,240,245,1) 0%,rgba(240,240,245,0.7) 60%,transparent 100%);color:rgba(0,0,0,.5)}
+
+  .ifc-detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: rgba(var(--cat-rgb, 229, 9, 20), 0.03);
+    border: 1px solid rgba(var(--cat-rgb, 229, 9, 20), 0.35);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 0 20px rgba(var(--cat-rgb, 229, 9, 20), 0.05);
+    transition: all 0.3s;
+  }
+  html[data-theme="light"] .ifc-detail {
+    background: rgba(var(--cat-rgb, 229, 9, 20), 0.015);
+    border-color: rgba(var(--cat-rgb, 229, 9, 20), 0.25);
+  }
+  .ifc-detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+  .ifc-cat-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+    letter-spacing:.10em;text-transform:uppercase;padding:5px 12px;border-radius:999px;
+    border:1px solid;width:fit-content;margin-bottom:0;font-family:var(--font-body)}
+  .ifc-feat-icon{width:22px;height:22px;display:flex;
+    align-items:center;justify-content:center;margin-bottom:0;background:none !important}
+  .ifc-feat-icon svg{width:22px;height:22px}
+  .ifc-feat-name{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--text);
+    margin:0 0 12px;line-height:1.2;transition:opacity .2s ease,transform .2s ease;
+    font-family:var(--font-title)}
+  .ifc-feat-does{font-size:14.5px;color:var(--text-dim);margin:0 0 20px;line-height:1.65;
+    transition:opacity .2s ease,transform .2s ease;font-family:var(--font-body)}
+  .ifc-feat-why {
+    display: flex;
+    gap: 12px;
+    background: rgba(var(--cat-rgb, 229, 9, 20), 0.02);
+    border: 1px solid rgba(var(--cat-rgb, 229, 9, 20), 0.12);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: all 0.3s ease;
+  }
+  html[data-theme="light"] .ifc-feat-name{color:#0C0C0E}
+  html[data-theme="light"] .ifc-feat-does{color:#50505C}
+  html[data-theme="light"] .ifc-feat-why {
+    background: rgba(var(--cat-rgb, 229, 9, 20), 0.03);
+    border-color: rgba(var(--cat-rgb, 229, 9, 20), 0.15);
+  }
+  .ifc-why-icon{flex:0 0 auto;margin-top:2px}
+  .ifc-why-icon svg{width:15px;height:15px;stroke:var(--cat-color, #E8A317)}
+  .ifc-feat-why-text{font-size:13.5px;color:var(--text-dim);line-height:1.55;font-family:var(--font-body)}
+  html[data-theme="light"] .ifc-feat-why-text{color:#50505C}
+  .ifc-feat-why-text strong{color:var(--cat-color, #E8A317);font-weight:600;display:block;margin-bottom:3px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+
+  .ifc-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 22px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .ifc-prog-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    cursor: pointer;
+    transition: all .25s ease;
+    flex: 0 0 auto;
+  }
+  .ifc-prog-dot.active {
+    width: 15px;
+    border-radius: 3px;
+  }
+  html[data-theme="light"] .ifc-prog-dot{background:rgba(0,0,0,.12)}
+  .ifc-lock-hint{font-size:11px;color:rgba(255,255,255,.2);letter-spacing:.03em;margin-top:10px;display:none;font-family:var(--font-body)}
+  html[data-theme="light"] .ifc-lock-hint{color:rgba(0,0,0,.25)}
+  .ifc-wrap.is-locked .ifc-lock-hint{display:block}
+  .ifc-detail.fading .ifc-feat-name,.ifc-detail.fading .ifc-feat-does,.ifc-detail.fading .ifc-feat-why{
+    opacity:0;transform:translateY(8px)}
+
+  @media(max-width:720px){
+    .ifc-wrap{border-radius:16px}
+    .ifc-header{padding:28px 20px 0}
+    .ifc-h2{font-size:22px}
+    .ifc-sub{font-size:13.5px;margin-bottom:20px}
+    .ifc-marquee-row{padding:14px 0}
+    .ifc-pill{font-size:12px;padding:6px 12px;margin:0 4px}
+    .ifc-content{flex-direction:column;padding:20px 20px 28px;gap:16px;min-height:auto}
+    .ifc-media{flex:none;width:100%}
+    .ifc-gif-frame{min-height:220px;height:220px}
+    .ifc-ph-icon{width:56px;height:56px}
+    .ifc-ph-icon svg{width:28px;height:28px}
+    .ifc-feat-name{font-size:20px}
+    .ifc-detail{padding:20px}
+    .ifc-progress{padding-top:16px}
+  }
+
+  /* ═══ Video Tutorial Section ═══ */
+  .vtut-card{display:flex;gap:0;background:var(--gray);border:1px solid rgba(255,255,255,.06);
+    border-radius:20px;overflow:hidden}
+  html[data-theme="light"] .vtut-card{background:#EEEEF4;border-color:rgba(0,0,0,.08)}
+  .vtut-info{flex:0 0 340px;padding:36px 30px;display:flex;flex-direction:column;
+    border-right:1px solid rgba(255,255,255,.06)}
+  html[data-theme="light"] .vtut-info{border-right-color:rgba(0,0,0,.08)}
+  .vtut-badge-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+  .vtut-badge{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 10px;border-radius:999px;font-family:var(--font-body)}
+  .vtut-badge.tamil{background:rgba(255,153,0,.12);color:#ffa500;border:1px solid rgba(255,153,0,.25)}
+  .vtut-badge.win{background:rgba(0,120,212,.12);color:#60a5fa;border:1px solid rgba(0,120,212,.25)}
+  .vtut-badge.beginner{background:rgba(37,211,102,.1);color:#25D366;border:1px solid rgba(37,211,102,.22)}
+  .vtut-badge.opensource{background:var(--red-dim);color:var(--red-hi);border:1px solid var(--red-glow)}
+  .vtut-title{font-family:var(--font-title);font-size:21px;font-weight:700;color:var(--text);
+    line-height:1.3;margin:0 0 10px;letter-spacing:-.01em}
+  html[data-theme="light"] .vtut-title{color:#0C0C0E}
+  .vtut-desc{font-size:13.5px;color:var(--text-dim);line-height:1.65;margin:0 0 22px;font-family:var(--font-body)}
+  html[data-theme="light"] .vtut-desc{color:#50505C}
+  .vtut-chapters{display:flex;flex-direction:column;gap:8px;margin-bottom:26px}
+  .vtut-ch{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;font-family:var(--font-body)}
+  .vtut-ch-num{flex:0 0 auto;width:20px;height:20px;border-radius:6px;background:var(--red-dim);
+    color:var(--red-hi);border:1px solid var(--red-glow);display:flex;align-items:center;
+    justify-content:center;font-size:9px;font-weight:700;margin-top:1px}
+  .vtut-ch-text{color:var(--text-dim);line-height:1.4}
+  html[data-theme="light"] .vtut-ch-text{color:#50505C}
+  .vtut-actions{display:flex;flex-direction:column;gap:9px;margin-top:auto;padding-top:22px}
+  .vtut-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;
+    border-radius:10px;font-size:13.5px;font-weight:600;font-family:var(--font-body);
+    text-decoration:none;transition:all .18s ease;border:none;cursor:pointer}
+  .vtut-btn-yt{background:#FF0000;color:#fff}
+  .vtut-btn-yt:hover{background:#cc0000;transform:translateY(-1px)}
+  .vtut-btn-gh{background:rgba(255,255,255,.07);color:var(--text);border:1px solid rgba(255,255,255,.12)}
+  .vtut-btn-gh:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
+  html[data-theme="light"] .vtut-btn-gh{background:rgba(0,0,0,.05);color:#1a1a22;border-color:rgba(0,0,0,.12)}
+  html[data-theme="light"] .vtut-btn-gh:hover{background:rgba(0,0,0,.09)}
+  .vtut-btn svg{width:16px;height:16px;flex:0 0 auto}
+  .vtut-embed{flex:1;position:relative;min-height:380px;background:#000}
+  .vtut-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;display:block}
+  @media(max-width:820px){
+    .vtut-card{flex-direction:column}
+    .vtut-info{flex:none;border-right:none;border-bottom:1px solid rgba(255,255,255,.06);padding:26px 20px}
+    html[data-theme="light"] .vtut-info{border-bottom-color:rgba(0,0,0,.08)}
+    .vtut-embed{min-height:240px}
+    .vtut-title{font-size:18px}
+    .vtut-actions{flex-direction:row;padding-top:18px}
+    .vtut-btn{flex:1}
+  }
+  @media(max-width:480px){.vtut-actions{flex-direction:column}.vtut-btn{flex:none}}
+
   </style>
 </head>
 <body>
@@ -5112,18 +5350,17 @@
   <!-- Scroll progress bar -->
   <div id="scrollProgress"></div>
 
-  <!-- Custom cursor (desktop only) -->
-  <div id="cursor-dot"></div>
-  <div id="cursor-ring"></div>
 
   <!-- Canvas Connected Node Mesh Background -->
   <canvas id="nodesCanvas"></canvas>
   <div class="bg-grid"></div>
 
-  <!-- Radial glowing spots -->
-  <div class="glow-field glow-top"></div>
-  <div class="glow-field glow-mid"></div>
-  <div class="glow-field glow-bot"></div>
+  <!-- Radial glowing spots (fixed overlay so they never expand body scroll width) -->
+  <div class="glow-wrap">
+    <div class="glow-field glow-top"></div>
+    <div class="glow-field glow-mid"></div>
+    <div class="glow-field glow-bot"></div>
+  </div>
 
   <!-- ══ NAVIGATION BAR ══ -->
   <header id="header">
@@ -5145,12 +5382,16 @@
       </ul>
 
       <div class="nav-act">
+        <a href="/" class="back-btn" aria-label="Back to ForgeMind AI">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          ForgeMind
+        </a>
         <div class="gh-star-btn">
-          <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="gh-star-left" aria-label="Star ForgeCHAT on GitHub">
+          <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" class="gh-star-left" aria-label="Star ForgeCHAT on GitHub">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
             Star
           </a>
-          <a href="https://github.com/Forgemind-git/ForgeCRM/stargazers" target="_blank" class="gh-star-right" id="ghStarCount" aria-label="View stargazers">0</a>
+          <a href="https://github.com/Forgemind-git/ForgeChat/stargazers" target="_blank" class="gh-star-right" id="ghStarCount" aria-label="View stargazers">0</a>
         </div>
         <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">
           <div class="tt-knob" id="ttKnob">
@@ -5183,6 +5424,10 @@
       <li><a href="#roadmap" onclick="toggleMenu()">Roadmap</a></li>
     </ul>
     <div style="display:flex; flex-direction:column; gap:10px; margin-top: auto;">
+      <a href="/" class="btn btn-glass" style="width:100%; display:flex; align-items:center; gap:8px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to ForgeMind AI
+      </a>
       <button onclick="toggleTheme()" style="display:flex;align-items:center;justify-content:space-between;background:var(--gray);border:1px solid var(--glass-border);border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--text-dim);font-size:13px;font-family:var(--font-body);width:100%;transition:all 0.2s;">
         <span id="mobileThemeLabel">Switch to Light Mode</span>
         <div class="theme-toggle" style="pointer-events:none;margin:0;">
@@ -5192,11 +5437,11 @@
           </div>
         </div>
       </button>
-      <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="btn btn-glass" style="width:100%;">
+      <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" class="btn btn-glass" style="width:100%;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right:6px;"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
         GitHub Organisation
       </a>
-      <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="btn btn-red" style="width:100%;">Star on GitHub</a>
+      <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" class="btn btn-red" style="width:100%;">Star on GitHub</a>
     </div>
   </div>
 
@@ -5207,7 +5452,7 @@
         
         <!-- Left Column -->
         <div class="hero-left rv">
-          <div class="sec-tag" style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;"><span class="pulse-dot" style="background: #25D366; box-shadow: 0 0 8px #25D366;"></span> WhatsApp Business CHAT &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; v1.0</div>
+          <div class="sec-tag" style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366; text-transform: none !important; white-space: nowrap;"><span class="pulse-dot" style="background: #25D366; box-shadow: 0 0 8px #25D366;"></span> WhatsApp Business CHAT &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; v1.0</div>
           <h1 class="hero-h1">
             <span style="white-space: nowrap;">Build. Connect.</span><br>
             <span class="gradient-red typed-line"><span id="heroTyped"></span></span>
@@ -5215,7 +5460,7 @@
           <p class="hero-p">ForgeCHAT is a modern, self-hosted, open-source CHAT platform built to run your entire customer communication over the WhatsApp Business Cloud API. Connect your Meta developer account, automate conversations, coordinate your support team, and broadcast campaigns — all with zero licensing fees.</p>
           
           <div class="hero-ctas">
-            <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="btn btn-red btn-lg">
+            <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" class="btn btn-red btn-lg">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
               Star on GitHub
             </a>
@@ -5230,31 +5475,27 @@
 
           <div class="hero-metrics">
             <div class="hm-item">
-              <div class="hm-val">1,248</div>
+              <div class="hm-val" id="heroStars">—</div>
               <div class="hm-lbl">GitHub Stars</div>
             </div>
             <div class="hm-item">
-              <div class="hm-val">95<span>%</span></div>
-              <div class="hm-lbl">API Coverage</div>
+              <div class="hm-val" id="heroForks">—</div>
+              <div class="hm-lbl">Forks</div>
             </div>
             <div class="hm-item">
-              <div class="hm-val">120<span>+</span></div>
+              <div class="hm-val" id="heroContribs">—</div>
               <div class="hm-lbl">Contributors</div>
             </div>
             <div class="hm-item">
-              <div class="hm-val" style="font-size:clamp(1rem,2.5vw,1.4rem);">AGPL 3.0</div>
+              <div class="hm-val" style="font-size:13px;font-weight:700;letter-spacing:.02em;">Sustainable Use License</div>
               <div class="hm-lbl">License</div>
             </div>
           </div>
 
           <!-- Loved by worldwide devs stack -->
           <div class="loved-by">
-            <div class="avatar-stack">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64&q=80" alt="Dev"/>
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=64&h=64&q=80" alt="Dev"/>
-              <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=64&h=64&q=80" alt="Dev"/>
-              <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=64&h=64&q=80" alt="Dev"/>
-              <div class="avatar-more">+120</div>
+            <div class="avatar-stack" id="avatarStack">
+              <div class="avatar-more" id="avatarMore">+…</div>
             </div>
             <div class="loved-text">Loved by developers worldwide</div>
           </div>
@@ -5381,12 +5622,12 @@
         <div class="community-feed rv" style="animation-delay: 0.4s;">
           <div class="cf-header">
             <span class="cf-title">Active Community</span>
-            <div class="cf-online"><span></span> 236</div>
+            <div class="cf-online"><span></span> <span id="cfOnlineCount">—</span></div>
           </div>
           <div class="cf-list" id="communityList">
             <!-- Dynamically populated by javascript -->
           </div>
-          <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="cf-btn">
+          <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" class="cf-btn">
             View on GitHub
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
@@ -5401,10 +5642,10 @@
               </div>
               <div class="osc-text">
                 <h4>Open Source. Built for Developers.</h4>
-                <p>ForgeCHAT is 100% open source under the AGPL 3.0. Contributions, ideas, and feedback are always welcome.</p>
+                <p>ForgeCHAT is 100% open source under the Sustainable Use License. Contributions, ideas, and feedback are always welcome.</p>
               </div>
             </div>
-            <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" class="btn btn-red btn-sm">
+            <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" class="btn btn-red btn-sm">
               View on GitHub &nbsp;→
             </a>
           </div>
@@ -5475,7 +5716,7 @@
             </div>
           </div>
 
-          <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank" style="display:flex; align-items:center; gap:10px; margin-bottom:10px; padding:10px 14px; background:rgba(37,211,102,0.05); border:1px solid rgba(37,211,102,0.18); border-radius:10px; text-decoration:none; transition:border-color 0.2s, background 0.2s;" onmouseenter="this.style.background='rgba(37,211,102,0.1)';this.style.borderColor='rgba(37,211,102,0.35)'" onmouseleave="this.style.background='rgba(37,211,102,0.05)';this.style.borderColor='rgba(37,211,102,0.18)'">
+          <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" style="display:flex; align-items:center; gap:10px; margin-bottom:10px; padding:10px 14px; background:rgba(37,211,102,0.05); border:1px solid rgba(37,211,102,0.18); border-radius:10px; text-decoration:none; transition:border-color 0.2s, background 0.2s;" onmouseenter="this.style.background='rgba(37,211,102,0.1)';this.style.borderColor='rgba(37,211,102,0.35)'" onmouseleave="this.style.background='rgba(37,211,102,0.05)';this.style.borderColor='rgba(37,211,102,0.18)'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#25D366;flex-shrink:0;"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
             <div>
               <div style="font-size:11.5px;font-weight:700;color:#25D366;line-height:1.2;">Help Build More Nodes</div>
@@ -5808,6 +6049,47 @@
     </div>
   </section>
 
+  <section class="sec" id="feat-explorer">
+    <div class="container">
+      <div class="sec-header rv">
+        <div class="sec-tag" style="background:var(--red-dim);border-color:var(--red-glow);color:var(--red-hi)">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:5px;vertical-align:middle"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Feature Explorer
+        </div>
+        <h2 class="sec-title">Everything ForgeChat <span class="highlight">can do</span></h2>
+        <p class="sec-desc">32 features across 6 categories &mdash; hover any pill to pause, click to pin a feature.</p>
+      </div>
+      <div class="ifc-wrap" id="ifc-section">
+        <div class="ifc-marquee-row">
+          <div class="ifc-marquee-track" id="ifc-track"></div>
+        </div>
+        <div class="ifc-content">
+          <div class="ifc-media">
+            <div class="ifc-gif-frame" id="ifc-frame"></div>
+          </div>
+          <div class="ifc-detail" id="ifc-detail">
+            <div class="ifc-detail-header">
+              <div class="ifc-cat-badge" id="ifc-badge"></div>
+              <div class="ifc-feat-icon" id="ifc-icon"></div>
+            </div>
+            <h3 class="ifc-feat-name" id="ifc-name"></h3>
+            <p class="ifc-feat-does" id="ifc-does"></p>
+            <div class="ifc-feat-why">
+              <div class="ifc-why-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div class="ifc-feat-why-text">
+                <strong>Why it matters</strong>
+                <span id="ifc-why"></span>
+              </div>
+            </div>
+            <div class="ifc-progress" id="ifc-progress"></div>
+            <div class="ifc-lock-hint">Click the same pill again to resume auto-cycle &rarr;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="modules">
     <div class="container">
       <div class="sec-header rv">
@@ -6041,7 +6323,7 @@
       <div class="sec-header rv">
         <div class="sec-tag"><span class="pulse-dot"></span>Compare</div>
         <h2 class="sec-title"><span>Why Developers Choose</span> <span class="highlight">ForgeCHAT</span></h2>
-        <p class="sec-desc">A side-by-side architectural and pricing breakdown showing why self-hosting our AGPL platform outperforms locked-in vendor suites.</p>
+        <p class="sec-desc">A side-by-side architectural and pricing breakdown showing why self-hosting our open-source platform outperforms locked-in vendor suites.</p>
       </div>
 
       <div class="comp-wrap rv">
@@ -6058,7 +6340,7 @@
           <tbody>
             <tr>
               <td>Open Source</td>
-              <td class="brand-col"><span class="comp-val-yes">✓ 100% AGPL 3.0</span></td>
+              <td class="brand-col"><span class="comp-val-yes">✓ 100% Sustainable Use License</span></td>
               <td><span class="comp-val-no">✗ Closed Source</span></td>
               <td><span class="comp-val-no">✗ Closed Source</span></td>
               <td><span class="comp-val-no">✗ Closed Source</span></td>
@@ -6132,7 +6414,7 @@
           
           <h2 class="dev-sec-title">Get Started <br>in <span class="highlight-red">Minutes</span></h2>
           
-          <p class="dev-sec-desc">Launch your self-hosted WhatsApp CHAT panel in 5 simple commands. Everything is configured using straightforward environments.</p>
+          <p class="dev-sec-desc">Launch your self-hosted WhatsApp CHAT panel on Windows in 5 simple steps. Docker handles the environment — no manual config needed.</p>
           
           <!-- Metadata status badges -->
           <div class="sec-badges">
@@ -6206,90 +6488,90 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 10px; height: 10px;"><polyline points="20 6 9 17 4 12"/></svg>
                   </span>
                 </div>
-                <p class="step-card-desc">Clone the official repository and change the working directory.</p>
+                <p class="step-card-desc">Open PowerShell and clone the official ForgeChat repository to your Desktop.</p>
                 <div class="step-card-codebox">
-                  <span class="step-card-cmd">git clone</span>
-                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'git clone https://github.com/Forgemind-git/ForgeCRM.git')">
+                  <span class="step-card-cmd">git clone …/ForgeChat.git forgechat</span>
+                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'git clone https://github.com/Forgemind-git/ForgeChat.git forgechat')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   </button>
                 </div>
               </div>
             </div>
-            
+
             <!-- Step 2 Card -->
             <div class="step-card-box" data-step="2" id="stepCard-2" onmouseenter="runConsoleStep(2, true)">
               <div class="step-number-node">02</div>
               <div class="step-card-panel">
                 <div class="step-card-header">
-                  <span class="step-card-title">Install Dependencies</span>
+                  <span class="step-card-title">Enter Project Directory</span>
                   <span class="step-status-indicator">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 10px; height: 10px;"><polyline points="20 6 9 17 4 12"/></svg>
                   </span>
                 </div>
-                <p class="step-card-desc">Install essential node modules and packages.</p>
+                <p class="step-card-desc">Navigate into the cloned folder before running the installer.</p>
                 <div class="step-card-codebox">
-                  <span class="step-card-cmd">npm install</span>
-                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'npm install')">
+                  <span class="step-card-cmd">cd forgechat</span>
+                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'cd forgechat')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   </button>
                 </div>
               </div>
             </div>
-            
+
             <!-- Step 3 Card -->
             <div class="step-card-box" data-step="3" id="stepCard-3" onmouseenter="runConsoleStep(3, true)">
               <div class="step-number-node">03</div>
               <div class="step-card-panel">
                 <div class="step-card-header">
-                  <span class="step-card-title">Configure Environment</span>
+                  <span class="step-card-title">Run Installer Script</span>
                   <span class="step-status-indicator">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 10px; height: 10px;"><polyline points="20 6 9 17 4 12"/></svg>
                   </span>
                 </div>
-                <p class="step-card-desc">Copy .env.example to .env and insert your Meta Cloud credentials.</p>
+                <p class="step-card-desc">One script builds containers, applies migrations, and starts the app on port 80.</p>
                 <div class="step-card-codebox">
-                  <span class="step-card-cmd">.env.example to .env</span>
-                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'cp .env.example .env')">
+                  <span class="step-card-cmd">.\install.ps1</span>
+                  <button class="step-card-copybtn" onclick="copyStepCmd(event, '.\\install.ps1')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   </button>
                 </div>
               </div>
             </div>
-            
+
             <!-- Step 4 Card -->
             <div class="step-card-box" data-step="4" id="stepCard-4" onmouseenter="runConsoleStep(4, true)">
               <div class="step-number-node">04</div>
               <div class="step-card-panel">
                 <div class="step-card-header">
-                  <span class="step-card-title">Run Database Migrations</span>
+                  <span class="step-card-title">Install Cloudflare Tunnel</span>
                   <span class="step-status-indicator">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 10px; height: 10px;"><polyline points="20 6 9 17 4 12"/></svg>
                   </span>
                 </div>
-                <p class="step-card-desc">Set up database tables and columns with migrations.</p>
+                <p class="step-card-desc">Install cloudflared via winget to expose your local server for WhatsApp webhooks.</p>
                 <div class="step-card-codebox">
-                  <span class="step-card-cmd">npm run db:migrate</span>
-                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'npm run db:migrate')">
+                  <span class="step-card-cmd">winget install Cloudflare.cloudflared</span>
+                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'winget install --id Cloudflare.cloudflared')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   </button>
                 </div>
               </div>
             </div>
-            
+
             <!-- Step 5 Card -->
             <div class="step-card-box" data-step="5" id="stepCard-5" onmouseenter="runConsoleStep(5, true)">
               <div class="step-number-node">05</div>
               <div class="step-card-panel">
                 <div class="step-card-header">
-                  <span class="step-card-title">Launch Developer Server</span>
+                  <span class="step-card-title">Start Public Tunnel</span>
                   <span class="step-status-indicator" style="border-radius: 6px;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 11px; height: 11px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                   </span>
                 </div>
-                <p class="step-card-desc">Run the development server to boot the engine and open local port 3000.</p>
+                <p class="step-card-desc">Open a new PowerShell window and run the tunnel. Copy the generated HTTPS URL into Meta's webhook settings.</p>
                 <div class="step-card-codebox">
-                  <span class="step-card-cmd">npm run dev</span>
-                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'npm run dev')">
+                  <span class="step-card-cmd">cloudflared tunnel --url http://localhost:80</span>
+                  <button class="step-card-copybtn" onclick="copyStepCmd(event, 'cloudflared tunnel --url http://localhost:80')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   </button>
                 </div>
@@ -6312,13 +6594,13 @@
               </div>
             </div>
             <div class="banner-right">
-              <a href="https://github.com/Forgemind-git/ForgeCRM" class="github-star-card" target="_blank">
+              <a href="https://github.com/Forgemind-git/ForgeChat" class="github-star-card" target="_blank">
                 <span class="star-text">
                   <svg viewBox="0 0 24 24" fill="currentColor" style="width: 15px; height: 15px; margin-right: 4px; vertical-align: middle;"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                   Star us on GitHub
                 </span>
                 <span class="star-link">
-                  github.com/Forgemind-git/ForgeCRM
+                  github.com/Forgemind-git/ForgeChat
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 11px; height: 11px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </span>
               </a>
@@ -6326,6 +6608,66 @@
           </div>
         </div>
         
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ VIDEO TUTORIAL ══ -->
+  <section class="sec" id="video-guide">
+    <div class="container">
+      <div class="sec-header rv">
+        <div class="sec-tag" style="background:rgba(255,0,0,.1);border-color:rgba(255,0,0,.2);color:#ff6b6b">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="margin-right:5px;vertical-align:middle"><polygon points="5 3 19 12 5 21 5 3"/></svg>Video Guide
+        </div>
+        <h2 class="sec-title">Watch the Full <span class="highlight">Installation Guide</span></h2>
+        <p class="sec-desc">Complete Windows installation walkthrough in Tamil — step-by-step, beginner-friendly, no prior technical experience needed.</p>
+      </div>
+
+      <div class="vtut-card">
+        <!-- Left: info panel -->
+        <div class="vtut-info">
+          <div class="vtut-badge-row">
+            <span class="vtut-badge tamil">🇮🇳 Tamil</span>
+            <span class="vtut-badge win">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="margin-right:3px;vertical-align:middle"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>Windows
+            </span>
+            <span class="vtut-badge beginner">Beginner Friendly</span>
+            <span class="vtut-badge opensource">Open Source</span>
+          </div>
+
+          <div class="vtut-title">ForgeChat — Windows Installation Guide (Tamil)</div>
+          <p class="vtut-desc">ForgeChat installation for Windows in Tamil (For English, change Audio track to English). A detailed, step-by-step walkthrough showing how to install and configure ForgeChat on Windows from scratch. Perfect for non-technical users setting up their own self-hosted WhatsApp Business platform.</p>
+
+          <div class="vtut-chapters">
+            <div class="vtut-ch"><span class="vtut-ch-num">1</span><span class="vtut-ch-text">Prerequisites &amp; system requirements check</span></div>
+            <div class="vtut-ch"><span class="vtut-ch-num">2</span><span class="vtut-ch-text">Cloning the ForgeChat repository from GitHub</span></div>
+            <div class="vtut-ch"><span class="vtut-ch-num">3</span><span class="vtut-ch-text">Environment setup &amp; configuration</span></div>
+            <div class="vtut-ch"><span class="vtut-ch-num">4</span><span class="vtut-ch-text">Running the app &amp; connecting WhatsApp Business API</span></div>
+            <div class="vtut-ch"><span class="vtut-ch-num">5</span><span class="vtut-ch-text">First login, team setup &amp; sending your first message</span></div>
+          </div>
+
+          <div class="vtut-actions">
+            <a href="https://youtu.be/9g73w14CpYA" target="_blank" rel="noopener" class="vtut-btn vtut-btn-yt">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.02 L15.5 12 L9.75 8.98 Z"/></svg>
+              Watch on YouTube
+            </a>
+            <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank" rel="noopener" class="vtut-btn vtut-btn-gh">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.115 2.51.337 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
+              View on GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: YouTube embed -->
+        <div class="vtut-embed">
+          <iframe
+            src="https://www.youtube.com/embed/9g73w14CpYA?rel=0&modestbranding=1"
+            title="ForgeChat Windows Installation Guide in Tamil"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
       </div>
     </div>
   </section>
@@ -6415,7 +6757,7 @@
           <p>Clone the official repository, join the builder guild, and start deploying today.</p>
         </div>
         <div class="cmd-copy-box">
-          <span class="cmd-text" id="cmdGitClone">git clone https://github.com/Forgemind-git/ForgeCRM.git</span>
+          <span class="cmd-text" id="cmdGitClone">git clone https://github.com/Forgemind-git/ForgeChat.git</span>
           <button class="cmd-copy-btn" onclick="copyGitClone()">Copy</button>
         </div>
       </div>
@@ -6434,9 +6776,9 @@
 
         <div class="foot-cols">
           <h5>Community Resources</h5>
-          <a href="https://github.com/Forgemind-git/ForgeCRM" target="_blank">GitHub Org</a>
-          <a href="https://github.com/Forgemind-git/ForgeCRM/issues" target="_blank">Submit Issues</a>
-          <a href="https://github.com/Forgemind-git/ForgeCRM/pulls" target="_blank">Pull Requests</a>
+          <a href="https://github.com/Forgemind-git/ForgeChat" target="_blank">GitHub Org</a>
+          <a href="https://github.com/Forgemind-git/ForgeChat/issues" target="_blank">Submit Issues</a>
+          <a href="https://github.com/Forgemind-git/ForgeChat/pulls" target="_blank">Pull Requests</a>
         </div>
 
         <div class="foot-cols">
@@ -6444,13 +6786,13 @@
           <a href="#install">Timeline Guide</a>
           <a href="#features">Features</a>
           <a href="#modules">Module Reference</a>
-          <a href="https://github.com/Forgemind-git/ForgeCRM/blob/main/LICENSE" target="_blank">AGPL 3.0</a>
+          <a href="https://github.com/Forgemind-git/ForgeChat/blob/main/LICENSE" target="_blank">Sustainable Use License</a>
         </div>
 
       </div>
 
       <div class="footer-bottom">
-        <div class="fb-copy">© 2026 <span>Forgemind</span>. Released under the AGPL 3.0. Built with ❤ in the open.</div>
+        <div class="fb-copy">© 2026 <span>Forgemind</span>. Released under the Sustainable Use License. Built with ❤ in the open.</div>
         <div class="fb-pills">
           <span class="fb-pill">Node.js</span>
           <span class="fb-pill">React 18</span>
@@ -6586,41 +6928,27 @@
     }
     animateMesh();
 
-    // ─── ACTIVE COMMUNITY LOG GENERATOR ───
-    const events = [
-      { user: "@sarthak", action: "pushed a commit", detail: '"fix: webhook retry logic"', time: "2m ago" },
-      { user: "@meera", action: "opened an issue", detail: '"Add multi-agent routing"', time: "6m ago" },
-      { user: "@alex", action: "starred the repo", detail: "ForgeCHAT is now at 1,248 stars", time: "8m ago" },
-      { user: "@fatima", action: "joined Discord", detail: "Welcome to the guild!", time: "12m ago" },
-      { user: "@developer", action: "merged PR #421", detail: '"Improve message queue"', time: "15m ago" },
-      { user: "@karl", action: "pushed a commit", detail: '"feat: add rate limits"', time: "19m ago" },
-      { user: "@jane", action: "opened a PR", detail: '"docs: update api spec"', time: "25m ago" }
-    ];
+    // ─── ACTIVE COMMUNITY LOG GENERATOR (real GitHub data only) ───
+    const events = [];
 
     const cfList = document.getElementById('communityList');
     function renderLogs() {
       cfList.innerHTML = '';
+      if (events.length === 0) {
+        cfList.innerHTML = '<div class="cf-item" style="color:rgba(150,150,160,.6);font-size:12px;padding:8px 0;">Loading activity from GitHub…</div>';
+        return;
+      }
       events.forEach(ev => {
         const item = document.createElement('div');
         item.className = 'cf-item';
-        item.innerHTML = `
-          <div class="cf-user-act"><span class="cf-user">${ev.user}</span> <span class="cf-action">${ev.action}</span></div>
-          <div class="cf-detail">${ev.detail}</div>
-          <div class="cf-time">${ev.time}</div>
-        `;
+        item.innerHTML =
+          '<div class="cf-user-act"><span class="cf-user">' + ev.user + '</span> <span class="cf-action">' + ev.action + '</span></div>' +
+          '<div class="cf-detail">' + ev.detail + '</div>' +
+          '<div class="cf-time">' + ev.time + '</div>';
         cfList.appendChild(item);
       });
     }
     renderLogs();
-
-    // Periodically shift the events live to simulate activity
-    setInterval(() => {
-      const popped = events.shift();
-      // update time slightly
-      popped.time = "Just now";
-      events.push(popped);
-      renderLogs();
-    }, 4500);
 
     // ─── NEW n8n-STYLE WORKFLOW INTERACTION ENGINE ───
     const workflowSchemas = {
@@ -7391,47 +7719,47 @@
     // ─── DEVELOPER MANUAL TYPING SIMULATOR ───
     const devmanSteps = {
       1: {
-        cmd: "git clone https://github.com/Forgemind-git/ForgeCRM.git",
+        cmd: "git clone https://github.com/Forgemind-git/ForgeChat.git forgechat",
         lines: [
-          '<span class="c-comment">Cloning into \'ForgeCHAT\'...</span>',
+          '<span class="c-comment">Cloning into \'forgechat\'...</span>',
           'remote: Enumerating objects: 1248, done.',
           'Receiving objects: 100% (1248/1248), 5.42 MiB | 12.4 MB/s',
-          '<span class="c-success">✓ Cloned repository successfully.</span>'
+          '<span class="c-success">✓ Repository cloned successfully.</span>'
         ]
       },
       2: {
-        cmd: "npm install",
+        cmd: "cd forgechat",
         lines: [
-          '<span class="c-comment">Installing node modules...</span>',
-          'added 482 packages in 4.21s',
-          '18 packages are looking for funding',
-          '<span class="c-success">✓ All dependencies installed.</span>'
+          '<span class="c-comment">Entering project directory...</span>',
+          'PS C:\\Users\\User\\Desktop\\forgechat>',
+          '<span class="c-success">✓ Working directory set.</span>'
         ]
       },
       3: {
-        cmd: "cp .env.example .env",
+        cmd: ".\\install.ps1",
         lines: [
-          '<span class="c-comment">Copying environment config...</span>',
-          'Created new .env file.',
-          '<span class="c-comment"># Insert your Meta credentials in .env</span>'
+          '<span class="c-comment">Building Docker containers...</span>',
+          'Applying database migrations...',
+          'Generating secrets & credentials...',
+          '<span class="c-success">✓ ForgeChat is running at http://localhost</span>'
         ]
       },
       4: {
-        cmd: "npm run db:migrate",
+        cmd: "winget install --id Cloudflare.cloudflared",
         lines: [
-          '<span class="c-comment">Running database migrations...</span>',
-          'Running: 20260522_init_schema',
-          'Created: users, contacts, chat_sessions, campaigns',
-          '<span class="c-success">✓ Database structure complete.</span>'
+          '<span class="c-comment">Fetching Cloudflare tunnel client...</span>',
+          'Found: Cloudflare Tunnel (Cloudflare.cloudflared)',
+          'Successfully installed cloudflared.',
+          '<span class="c-success">✓ cloudflared ready.</span>'
         ]
       },
       5: {
-        cmd: "npm run dev",
+        cmd: "cloudflared tunnel --url http://localhost:80",
         lines: [
-          '<span class="c-comment">Booting local dev server...</span>',
-          'Ready in 820ms.',
-          'Listening: <span class="c-success">http://localhost:3000</span>',
-          '<span class="c-success">✓ ForgeCHAT is live! 🎉</span>'
+          '<span class="c-comment">Starting Cloudflare tunnel...</span>',
+          'Tunnel credentials written to disk.',
+          'Your tunnel URL: <span class="c-success">https://xxxx.trycloudflare.com</span>',
+          '<span class="c-success">✓ Paste this URL into Meta webhook settings.</span>'
         ]
       }
     };
@@ -7835,34 +8163,6 @@
     const bar = document.getElementById('scrollProgress');
     if (bar) lenis.on('scroll', ({ progress }) => { bar.style.width = (progress * 100) + '%'; });
 
-    // ─── 3. CUSTOM CURSOR (FINE-POINTER DEVICES ONLY) ────────────────────
-    if (window.matchMedia('(pointer: fine)').matches) {
-      document.body.classList.add('custom-cursor-active');
-      const dot  = document.getElementById('cursor-dot');
-      const ring = document.getElementById('cursor-ring');
-      let mx = 0, my = 0, rx = 0, ry = 0;
-
-      document.addEventListener('mousemove', e => {
-        mx = e.clientX; my = e.clientY;
-        dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-      });
-      (function trackRing() {
-        rx += (mx - rx) * 0.1;
-        ry += (my - ry) * 0.1;
-        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-        requestAnimationFrame(trackRing);
-      })();
-
-      const hoverSel = 'a, button, .mod-tab, .fcard, .bento-card, .floating-pill, .road-card, .mod-card, [onclick], .theme-toggle, .step-card-panel, .step-card-box';
-      document.querySelectorAll(hoverSel).forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-      });
-      document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
-      document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
-      document.addEventListener('mouseleave',() => { dot.style.opacity='0'; ring.style.opacity='0'; });
-      document.addEventListener('mouseenter',() => { dot.style.opacity='1'; ring.style.opacity='1'; });
-    }
 
     // ─── 4. TYPED.JS HERO HEADLINE CYCLING ───────────────────────────────
     if (typeof Typed !== 'undefined' && document.getElementById('heroTyped')) {
@@ -7899,15 +8199,23 @@
       };
       requestAnimationFrame(run);
     }
+    window._ghLiveData   = null;
+    window._heroVisible  = false;
+    function ghAnimateHero(d) {
+      const sEl = document.getElementById('heroStars');
+      const fEl = document.getElementById('heroForks');
+      const cEl = document.getElementById('heroContribs');
+      if (sEl) animCounter(sEl, d.stars,   2200, '', true);
+      if (fEl) animCounter(fEl, d.forks,   1800, '', false);
+      if (cEl) animCounter(cEl, d.contribs,2400, '+', false);
+    }
     const metricsWrap = document.querySelector('.hero-metrics');
     if (metricsWrap) {
       const io = new IntersectionObserver(entries => {
         if (!entries[0].isIntersecting) return;
         io.disconnect();
-        const vals = metricsWrap.querySelectorAll('.hm-val');
-        if (vals[0]) animCounter(vals[0], 1248, 2500, '',  true);
-        if (vals[1]) animCounter(vals[1], 95,   2000, '%', false);
-        if (vals[2]) animCounter(vals[2], 120,  2500, '+', false);
+        window._heroVisible = true;
+        if (window._ghLiveData) ghAnimateHero(window._ghLiveData);
       }, { threshold: 0.6 });
       io.observe(metricsWrap);
     }
@@ -8018,16 +8326,92 @@
     }
     updateActiveNav(); // run once on load
 
-    // ─── 9. LIVE GITHUB STAR COUNT ────────────────────────────────────────
-    fetch('https://api.github.com/repos/Forgemind-git/ForgeCRM')
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (!data || !data.stargazers_count) return;
-        const fmt = data.stargazers_count.toLocaleString();
-        const el = document.getElementById('ghStarCount');
-        if (el) el.textContent = fmt;
-      })
-      .catch(() => {});
+    // ─── 9. LIVE GITHUB STATS — each fetch fires independently for fastest UI ─────
+    (function () {
+      const BASE = 'https://api.github.com/repos/Forgemind-git/ForgeChat';
+
+      function timeAgo(iso) {
+        const diff = Math.floor((Date.now() - new Date(iso)) / 1000);
+        if (diff < 60) return 'Just now';
+        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+        return Math.floor(diff / 86400) + 'd ago';
+      }
+
+      // ① Repo meta — navbar stars + hero counters + community online count
+      fetch(BASE)
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(repo) {
+          if (!repo) return;
+          const navEl = document.getElementById('ghStarCount');
+          if (navEl) navEl.textContent = repo.stargazers_count.toLocaleString();
+          const cfOnline = document.getElementById('cfOnlineCount');
+          if (cfOnline) cfOnline.textContent = repo.stargazers_count.toLocaleString();
+          window._ghRepoData = repo;
+          if (window._ghContribs !== undefined) {
+            window._ghLiveData = { stars: repo.stargazers_count, forks: repo.forks_count, contribs: window._ghContribs };
+            if (window._heroVisible) ghAnimateHero(window._ghLiveData);
+          }
+        }).catch(function() {});
+
+      // ② Contributors count — avatar badge + hero counter
+      fetch(BASE + '/contributors?per_page=1&anon=true')
+        .then(function(r) {
+          if (!r.ok) return 0;
+          const link = r.headers.get('Link') || '';
+          const m = link.match(/[?&]page=(\d+)>;\s*rel=”last”/);
+          if (m) return parseInt(m[1], 10);
+          return r.json().then(function(arr) { return Array.isArray(arr) ? arr.length : 0; });
+        })
+        .then(function(count) {
+          window._ghContribs = count;
+          const avatarMore = document.getElementById('avatarMore');
+          if (avatarMore) avatarMore.textContent = count > 0 ? '+' + count : '+…';
+          if (window._ghRepoData) {
+            window._ghLiveData = { stars: window._ghRepoData.stargazers_count, forks: window._ghRepoData.forks_count, contribs: count };
+            if (window._heroVisible) ghAnimateHero(window._ghLiveData);
+          }
+        }).catch(function() {});
+
+      // ③ Contributors list — real avatars for “Loved by developers” stack
+      fetch(BASE + '/contributors?per_page=4')
+        .then(function(r) { return r.ok ? r.json() : []; })
+        .then(function(list) {
+          if (!Array.isArray(list) || list.length === 0) return;
+          const stack = document.getElementById('avatarStack');
+          const badge = document.getElementById('avatarMore');
+          if (!stack) return;
+          // Remove any existing img tags, keep the badge
+          Array.from(stack.querySelectorAll('img')).forEach(function(i) { i.remove(); });
+          // Insert real avatars before the badge
+          list.slice(0, 4).reverse().forEach(function(u) {
+            const img = document.createElement('img');
+            img.src   = u.avatar_url + '&s=64';
+            img.alt   = u.login;
+            img.title = '@' + u.login;
+            stack.insertBefore(img, badge);
+          });
+        }).catch(function() {});
+
+      // ④ Commits — community feed (fires immediately, updates feed as soon as done)
+      fetch(BASE + '/commits?per_page=7')
+        .then(function(r) { return r.ok ? r.json() : []; })
+        .then(function(commits) {
+          if (!Array.isArray(commits) || commits.length === 0) {
+            cfList.innerHTML = '<div class=”cf-item” style=”color:rgba(150,150,160,.6);font-size:12px;padding:8px 0;”>No commits found.</div>';
+            return;
+          }
+          events.length = 0;
+          commits.forEach(function(c) {
+            const author = c.author ? '@' + c.author.login : (c.commit.author.name || 'contributor');
+            const msg    = c.commit.message.split('\n')[0].slice(0, 60);
+            events.push({ user: author, action: 'pushed a commit', detail: '”' + msg + '”', time: timeAgo(c.commit.author.date) });
+          });
+          renderLogs();
+        }).catch(function() {
+          cfList.innerHTML = '<div class=”cf-item” style=”color:rgba(150,150,160,.6);font-size:12px;padding:8px 0;”>Could not reach GitHub.</div>';
+        });
+    }());
 
     // ─── 10. MAGNETIC SHINE ON .btn-red ───────────────────────────────────
     document.querySelectorAll('.btn-red').forEach(btn => {
@@ -8037,6 +8421,271 @@
         btn.style.setProperty('--by', ((e.clientY - r.top)  / r.height * 100) + '%');
       });
     });
+
+  // ═══ Feature Showcase ═══
+  (function(){
+    var IFC = [
+      {name:'Email & Password Login',cat:'Access & Team Control',catNum:'01',catColor:'#dc2626',catRgb:'220,38,38',
+        does:'Each team member signs in with their own email and password over a secure, encrypted session.',
+        why:'Keeps customer conversations private — only authorised staff can ever open the platform.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'},
+      {name:'Show / Hide Password',cat:'Access & Team Control',catNum:'01',catColor:'#dc2626',catRgb:'220,38,38',
+        does:'A one-tap toggle lets users reveal what they typed before signing in.',
+        why:'Fewer failed logins and a smoother first experience.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'},
+      {name:'Multiple Team Accounts',cat:'Access & Team Control',catNum:'01',catColor:'#dc2626',catRgb:'220,38,38',
+        does:'Admins add team members and reset their passwords from Settings → Users.',
+        why:'Everyone gets their own login — no shared passwords.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>'},
+      {name:'Role-Based Access',cat:'Access & Team Control',catNum:'01',catColor:'#dc2626',catRgb:'220,38,38',
+        does:'Admins see everything; Sales users see only the chats and contacts assigned to them.',
+        why:'Reps stay focused on their own customers; sensitive settings stay protected.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>'},
+      {name:'Per-Chat Assignment',cat:'Access & Team Control',catNum:'01',catColor:'#dc2626',catRgb:'220,38,38',
+        does:'Any conversation can be assigned to a specific team member.',
+        why:'Clear ownership means no customer message slips through the cracks.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'},
+      {name:'Fine-Grained Permissions',cat:'Access & Team Control',catNum:'01',catColor:'#dc2626',catRgb:'220,38,38',
+        does:'Grant or remove access to individual pages for a single user, beyond their role.',
+        why:'Tailored access controls for every team member and every situation.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'},
+      {name:'Unified Team Inbox',cat:'Team Inbox & Conversations',catNum:'02',catColor:'#0F6E56',catRgb:'15,110,86',
+        does:'One shared WhatsApp-style screen where your whole team sees and handles every conversation.',
+        why:'No more juggling personal phones or losing messages between team members.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>'},
+      {name:'Rich Messaging',cat:'Team Inbox & Conversations',catNum:'02',catColor:'#0F6E56',catRgb:'15,110,86',
+        does:'Send and receive images, documents, audio files, and video — just like native WhatsApp.',
+        why:'Communicate in the format customers are already comfortable with.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>'},
+      {name:'24-Hour Window Guidance',cat:'Team Inbox & Conversations',catNum:'02',catColor:'#0F6E56',catRgb:'15,110,86',
+        does:'A visual indicator shows exactly when the WhatsApp 24-hour reply window will close.',
+        why:'Stay compliant with WhatsApp policy and never accidentally breach messaging limits.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'},
+      {name:'Read & Delivery Status',cat:'Team Inbox & Conversations',catNum:'02',catColor:'#0F6E56',catRgb:'15,110,86',
+        does:'See when each message is delivered and when the customer has read it.',
+        why:'Know exactly where every conversation stands without chasing the customer.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>'},
+      {name:'Central Contact List',cat:'Customer Management',catNum:'03',catColor:'#534AB7',catRgb:'83,74,183',
+        does:'All your customers in one searchable, filterable database — your data, on your server.',
+        why:'Never lose a contact again, and find any customer in seconds.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>'},
+      {name:'Bulk Import',cat:'Customer Management',catNum:'03',catColor:'#534AB7',catRgb:'83,74,183',
+        does:'Upload your entire contact list via CSV in seconds.',
+        why:'Migrate your existing customer base instantly — no manual entry.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>'},
+      {name:'Color-Coded Tags',cat:'Customer Management',catNum:'03',catColor:'#534AB7',catRgb:'83,74,183',
+        does:'Tag any contact with a colour-coded label to segment and organise your customer base.',
+        why:'Find and filter the right customers at a glance, without opening a spreadsheet.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>'},
+      {name:'Tag Categories',cat:'Customer Management',catNum:'03',catColor:'#534AB7',catRgb:'83,74,183',
+        does:'Group related tags into named categories for a clean, scalable taxonomy.',
+        why:'Organise dozens of tags without chaos as your team and contact list grows.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'},
+      {name:'Custom Fields',cat:'Customer Management',catNum:'03',catColor:'#534AB7',catRgb:'83,74,183',
+        does:'Add any custom data field to a contact profile — text, number, date, dropdown, and more.',
+        why:'Capture exactly the information your business needs, not what a generic CRM offers.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>'},
+      {name:'Deals Pipeline',cat:'Customer Management',catNum:'03',catColor:'#534AB7',catRgb:'83,74,183',
+        does:'A Kanban board to track every deal as it moves through your custom sales stages.',
+        why:'Visualise your entire sales funnel and spot bottlenecks before they cost you revenue.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="18" rx="1"/><rect x="10" y="3" width="6" height="12" rx="1"/><rect x="17" y="3" width="6" height="8" rx="1"/></svg>'},
+      {name:'Pipeline Metrics',cat:'Customer Management',catNum:'03',catColor:'#534AB7',catRgb:'83,74,183',
+        does:'Charts showing deal counts, conversion rates, and velocity across every pipeline stage.',
+        why:'Know your numbers at a glance — no spreadsheet, no manual calculation.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>'},
+      {name:'Template Builder',cat:'Marketing & Outreach',catNum:'04',catColor:'#B45309',catRgb:'180,83,9',
+        does:'Build WhatsApp message templates with a live preview — see exactly what customers will receive.',
+        why:'Get WhatsApp approval faster and reduce back-and-forth with the API team.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>'},
+      {name:'Template Approval Tracking',cat:'Marketing & Outreach',catNum:'04',catColor:'#B45309',catRgb:'180,83,9',
+        does:'See the approval status of every template — pending, approved, or rejected — in one screen.',
+        why:'Never wonder where a template stands; act the moment it is approved.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>'},
+      {name:'Test & Duplicate',cat:'Marketing & Outreach',catNum:'04',catColor:'#B45309',catRgb:'180,83,9',
+        does:'Send a test message to yourself and duplicate any template to create variations quickly.',
+        why:'Ship faster with less risk — catch errors before customers ever see them.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 3H3v18h18v-5"/></svg>'},
+      {name:'Personalised Variables',cat:'Marketing & Outreach',catNum:'04',catColor:'#B45309',catRgb:'180,83,9',
+        does:'Insert names, order numbers, dates, and any custom data as variables into your templates.',
+        why:'Every message feels personally written — higher engagement and better experience.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>'},
+      {name:'Broadcast Campaigns',cat:'Marketing & Outreach',catNum:'04',catColor:'#B45309',catRgb:'180,83,9',
+        does:'Send a single approved template to hundreds or thousands of contacts in one action.',
+        why:'Reach your entire customer list in minutes — not hours of manual sending.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>'},
+      {name:'Live Delivery Tracking',cat:'Marketing & Outreach',catNum:'04',catColor:'#B45309',catRgb:'180,83,9',
+        does:'Real-time dashboard showing sent, delivered, read, and failed counts for every campaign.',
+        why:'Know your campaign performance the moment messages leave the platform.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="8"/><rect x="12" y="6" width="3" height="12"/><rect x="17" y="13" width="3" height="5"/></svg>'},
+      {name:'Drafts & History',cat:'Marketing & Outreach',catNum:'04',catColor:'#B45309',catRgb:'180,83,9',
+        does:'Save broadcast drafts and review a full history of all past campaigns.',
+        why:'Never lose a campaign in progress and easily repeat past successful outreach.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'},
+      {name:'Visual Flow Builder',cat:'Automation',catNum:'05',catColor:'#0369a1',catRgb:'3,105,161',
+        does:'Drag-and-drop chatbot builder with conditional branches, delays, and multiple message types.',
+        why:'Build complex conversation flows without writing a single line of code.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4a3 3 0 0 1 3 3v4.5"/></svg>'},
+      {name:'Keyword Triggers',cat:'Automation',catNum:'05',catColor:'#0369a1',catRgb:'3,105,161',
+        does:'Automatically fire a flow or reply when a customer sends a specific word or phrase.',
+        why:'Respond to common questions instantly — even outside business hours.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>'},
+      {name:'Execution History',cat:'Automation',catNum:'05',catColor:'#0369a1',catRgb:'3,105,161',
+        does:'A full log of every automation run — who triggered it, what was sent, and when.',
+        why:'Debug issues and audit your automation with complete confidence.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>'},
+      {name:'Preview & Test Flows',cat:'Automation',catNum:'05',catColor:'#0369a1',catRgb:'3,105,161',
+        does:'Step through and test your automation flow end-to-end before making it live.',
+        why:'Ship automations without surprises — know exactly what customers will receive.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'},
+      {name:'Connect WhatsApp Business',cat:'Platform & Settings',catNum:'06',catColor:'#4B5563',catRgb:'75,85,99',
+        does:'Link your WhatsApp Business API account directly from the settings panel.',
+        why:'One-time setup gives the entire platform access to your WhatsApp number.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'},
+      {name:'Account Health Alerts',cat:'Platform & Settings',catNum:'06',catColor:'#4B5563',catRgb:'75,85,99',
+        does:'Instant alerts when your WhatsApp Business number quality rating changes.',
+        why:'Act before your account gets restricted — protect your entire operation.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'},
+      {name:'Self-Hosted & Private',cat:'Platform & Settings',catNum:'06',catColor:'#4B5563',catRgb:'75,85,99',
+        does:'Run the entire ForgeChat platform on your own server — no cloud dependency.',
+        why:'Full data ownership and zero vendor lock-in. Your data never leaves your infrastructure.',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'}
+    ];
+
+    var IFC_MEDIA = {
+      'Email & Password Login':       'ForgeChat/images/forgechat-login.png',
+      'Show / Hide Password':         'ForgeChat/images/forgechat-login.png',
+      'Multiple Team Accounts':       'ForgeChat/images/forgechat-users.png',
+      'Role-Based Access':            'ForgeChat/images/forgechat-users.png',
+      'Per-Chat Assignment':          'ForgeChat/Chats.gif',
+      'Fine-Grained Permissions':     'ForgeChat/images/forgechat-users.png',
+      'Unified Team Inbox':           'ForgeChat/Chats.gif',
+      'Rich Messaging':               'ForgeChat/Chats.gif',
+      '24-Hour Window Guidance':      'ForgeChat/Chats.gif',
+      'Read & Delivery Status':       'ForgeChat/Chats.gif',
+      'Central Contact List':         'ForgeChat/images/forgechat-contacts.png',
+      'Bulk Import':                  'ForgeChat/images/forgechat-contacts.png',
+      'Color-Coded Tags':             'ForgeChat/images/forgechat-tags.png',
+      'Tag Categories':               'ForgeChat/images/forgechat-categories.png',
+      'Custom Fields':                'ForgeChat/images/forgechat-custom-fields.png',
+      'Deals Pipeline':               'ForgeChat/pipeline.gif',
+      'Pipeline Metrics':             'ForgeChat/pipeline.gif',
+      'Template Builder':             'ForgeChat/images/forgechat-template-builder.png',
+      'Template Approval Tracking':   'ForgeChat/images/forgechat-template-builder.png',
+      'Test & Duplicate':             'ForgeChat/images/forgechat-template-builder.png',
+      'Personalised Variables':       'ForgeChat/images/forgechat-template-builder.png',
+      'Broadcast Campaigns':          'ForgeChat/images/forgechat-broadcasts.png',
+      'Live Delivery Tracking':       'ForgeChat/images/forgechat-broadcasts.png',
+      'Drafts & History':             'ForgeChat/images/forgechat-broadcasts.png',
+      'Visual Flow Builder':          'ForgeChat/Automations.gif',
+      'Keyword Triggers':             'ForgeChat/Automations.gif',
+      'Execution History':            'ForgeChat/images/forgechat-automation-builder.png',
+      'Preview & Test Flows':         'ForgeChat/Automations.gif',
+      'Connect WhatsApp Business':    'ForgeChat/images/forgechat-settings.png',
+      'Account Health Alerts':        'ForgeChat/images/forgechat-settings.png',
+      'Self-Hosted & Private':        'ForgeChat/images/forgechat-settings.png'
+    };
+    var ifcIdx=0, ifcLocked=false;
+    var ifcDetail=document.getElementById('ifc-detail');
+    var ifcTrack=document.getElementById('ifc-track');
+    var ifcFrame=document.getElementById('ifc-frame');
+    var ifcSection=document.getElementById('ifc-section');
+    if(!ifcSection) return;
+
+    function ifcMakePills(){
+      ifcTrack.innerHTML='';
+      IFC.forEach(function(f,i){
+        var p=document.createElement('span');
+        p.className='ifc-pill'; p.dataset.fid=i;
+        p.innerHTML='<span class="ifc-dot" style="background:'+f.catColor+'"></span>'+f.name;
+        p.addEventListener('click',function(){
+          if(ifcLocked&&ifcIdx===i){ifcLocked=false;ifcSection.classList.remove('is-locked');}
+          else{ifcLocked=true;ifcSection.classList.add('is-locked');ifcIdx=i;ifcShow(i);}
+        });
+        ifcTrack.appendChild(p);
+      });
+    }
+
+    function ifcMakeDots(){
+      var prog=document.getElementById('ifc-progress');
+      prog.innerHTML='';
+      IFC.forEach(function(f,i){
+        var d=document.createElement('span');
+        d.className='ifc-prog-dot'; d.title=f.name;
+        d.addEventListener('click',(function(idx){return function(){
+          ifcLocked=true; ifcSection.classList.add('is-locked'); ifcIdx=idx; ifcShow(idx);
+        };})(i));
+        prog.appendChild(d);
+      });
+    }
+
+    function ifcUpdatePills(idx){
+      document.querySelectorAll('.ifc-pill').forEach(function(p){
+        var a=parseInt(p.dataset.fid)===idx;
+        p.classList.toggle('active',a);
+        p.style.borderColor=a?IFC[idx].catColor:'';
+        p.style.background=a?'rgba('+IFC[idx].catRgb+',0.18)':'';
+      });
+    }
+
+    function ifcUpdateDots(idx){
+      document.querySelectorAll('.ifc-prog-dot').forEach(function(d,i){
+        d.classList.toggle('active',i===idx);
+        d.style.background=i===idx?IFC[idx].catColor:'';
+      });
+    }
+
+    function ifcShow(idx){
+      var f=IFC[idx];
+      ifcDetail.classList.add('fading');
+      setTimeout(function(){
+        ifcDetail.style.setProperty('--cat-color', f.catColor);
+        ifcDetail.style.setProperty('--cat-rgb', f.catRgb);
+        var b=document.getElementById('ifc-badge');
+        b.textContent='CAT '+f.catNum+' · '+f.cat;
+        b.style.color=f.catColor; b.style.borderColor=f.catColor;
+        b.style.background='rgba('+f.catRgb+',0.12)';
+        var ic=document.getElementById('ifc-icon');
+        ic.innerHTML=f.icon; ic.style.background='rgba('+f.catRgb+',0.2)';
+        ic.querySelector('svg').setAttribute('stroke',f.catColor);
+        document.getElementById('ifc-name').textContent=f.name;
+        document.getElementById('ifc-does').textContent=f.does;
+        document.getElementById('ifc-why').textContent=f.why;
+        var mediaSrc = IFC_MEDIA[f.name];
+        var isLight = document.documentElement.getAttribute('data-theme')==='light';
+        if(mediaSrc){
+          var isGif = mediaSrc.toLowerCase().endsWith('.gif');
+          ifcFrame.style.background= isLight ? '#f0f0f5' : '#0C0C0D';
+          ifcFrame.innerHTML='<img class="ifc-gif-img'+(isGif?' is-gif':'')+'" src="'+mediaSrc+'" alt="'+f.name+'">'
+            +'<div class="ifc-frame-bottom">CAT '+f.catNum+' · '+f.cat+'</div>';
+        } else {
+          ifcFrame.style.background= isLight
+            ? 'linear-gradient(140deg,rgba('+f.catRgb+',0.10) 0%,rgba(240,240,245,0.97) 100%)'
+            : 'linear-gradient(140deg,rgba('+f.catRgb+',0.12) 0%,rgba(12,12,13,0.97) 100%)';
+          ifcFrame.innerHTML='<div class="ifc-ph-inner">'
+            +'<div class="ifc-ph-icon" style="background:rgba('+f.catRgb+',0.22)">'+f.icon+'</div>'
+            +'<div class="ifc-ph-label">'+f.name+'</div>'
+            +'</div>'
+            +'<div class="ifc-frame-bottom">CAT '+f.catNum+' · '+f.cat+'</div>';
+          ifcFrame.querySelector('.ifc-ph-icon svg').setAttribute('stroke',f.catColor);
+          ifcFrame.querySelector('.ifc-ph-icon svg').style.width='36px';
+          ifcFrame.querySelector('.ifc-ph-icon svg').style.height='36px';
+        }
+        ifcUpdatePills(idx); ifcUpdateDots(idx);
+        ifcDetail.classList.remove('fading');
+        var activePill = ifcTrack.querySelector('.ifc-pill[data-fid="' + idx + '"]');
+        if (activePill) {
+          var container = document.querySelector('.ifc-marquee-row');
+          if (container) {
+            var targetScroll = (activePill.offsetLeft + activePill.offsetWidth / 2) - (container.offsetWidth / 2);
+            container.scrollLeft = targetScroll;
+          }
+        }
+      },200);
+    }
+
+    ifcMakePills(); ifcMakeDots(); ifcShow(0);
+    setInterval(function(){if(!ifcLocked){ifcIdx=(ifcIdx+1)%IFC.length;ifcShow(ifcIdx);}},8500);
+  })();
 
   }());
   </script>
